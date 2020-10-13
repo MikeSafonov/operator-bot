@@ -1,0 +1,17 @@
+
+TABLE internal_users as i_users {
+  id INT [pk, increment]
+  telegram_id varchar(255) [not null]
+  full_name varchar(255) [not null]
+  status varchar() [not null]
+}
+TABLE timetable as tb {
+  id INT [pk, increment]
+  user_id int [ref: < i_users.id]
+  time date [unique, not null]
+}
+TABLE external_users as e_users {
+  id INT [pk, increment]
+  full_name varchar
+  telegram_id varchar [not null]
+}
