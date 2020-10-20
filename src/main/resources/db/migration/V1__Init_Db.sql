@@ -15,5 +15,5 @@ create table timetable(
     id int primary key auto_increment,
     user_id int not null,
     times date UNIQUE not null,
-    FOREIGN KEY (user_id) REFERENCES i_users(id)
+    FOREIGN KEY (user_id) REFERENCES internal_users(id)
 ) engine=InnoDB;
