@@ -8,9 +8,9 @@ import org.telegram.telegrambots.ApiContextInitializer;
 public class OperatorBotApplication {
 
 	public static void main(String[] args) {
-		
+
 		ApiContextInitializer.init();
-		
+
 		SpringApplication.run(OperatorBotApplication.class, args);
 	}
 
