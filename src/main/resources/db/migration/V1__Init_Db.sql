@@ -1,13 +1,13 @@
 create table internal_users(
     id int primary key auto_increment,
-    telegram_id varchar(255) not null,
+    telegram_id bigint not null,
     full_name varchar(255) not null,
     status int not null
 ) engine=InnoDB;
 
 create table external_users(
     id int primary key auto_increment,
-    telegram_id varchar(255) not null,
+    telegram_id bigint not null,
     full_name varchar(255) not null
 ) engine=InnoDB;
 
