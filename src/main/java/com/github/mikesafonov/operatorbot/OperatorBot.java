@@ -1,6 +1,7 @@
 package com.github.mikesafonov.operatorbot;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ public class OperatorBot extends TelegramLongPollingBot {
 		this.internalUserService = internalUserService;
 	}
 
+	@Value("${admin.list}")
+	private Set<Long> adminList;
 	@Value("${bot.name}")
 	private String botUsername;
 	@Value("${bot.token}")
@@ -34,7 +37,11 @@ public class OperatorBot extends TelegramLongPollingBot {
 			Optional<InternalUser> optionalUser = internalUserService.findByTelegramId(chatId);
 
 			optionalUser.ifPresentOrElse((value) -> {
-				sendMessage(chatId, "Привет, " + optionalUser.get().getFullName() + ", давно не виделись!");
+				if (adminList.contains(chatId)) {
+					sendMessage(chatId, "Привет, " + optionalUser.get().getFullName() + ", отныне ты администратор!");
+				} else {
+					sendMessage(chatId, "Привет, " + optionalUser.get().getFullName() + ", давно не виделись!");
+				}
 			}, () -> {
 				sendMessage(chatId, "Я тебя не знаю, брысь!");
 			});
