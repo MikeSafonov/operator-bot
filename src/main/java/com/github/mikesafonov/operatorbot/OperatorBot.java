@@ -1,8 +1,5 @@
 package com.github.mikesafonov.operatorbot;
 
-import java.util.Optional;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -10,20 +7,18 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import com.github.mikesafonov.operatorbot.model.InternalUser;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
+import com.github.mikesafonov.operatorbot.service.AuthorizationService;
+import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 
 @Component
 public class OperatorBot extends TelegramLongPollingBot {
+	private final AuthorizationService userAuthorization;
 
-	private final InternalUserService internalUserService;
-
-	public OperatorBot(InternalUserService internalUserService) {
-		this.internalUserService = internalUserService;
+	public OperatorBot(AuthorizationService userAuthorization) {
+		super();
+		this.userAuthorization = userAuthorization;
 	}
 
-	@Value("${admin.list}")
-	private Set<Long> adminList;
 	@Value("${bot.name}")
 	private String botUsername;
 	@Value("${bot.token}")
@@ -33,18 +28,20 @@ public class OperatorBot extends TelegramLongPollingBot {
 	public void onUpdateReceived(Update update) {
 		if (update.getMessage() != null && update.getMessage().hasText()) {
 			long chatId = update.getMessage().getChatId();
+			String name = update.getMessage().getFrom().getUserName();
+			AuthorizationTelegram user = userAuthorization.getInfo(chatId);
 
-			Optional<InternalUser> optionalUser = internalUserService.findByTelegramId(chatId);
-
-			optionalUser.ifPresentOrElse((value) -> {
-				if (adminList.contains(chatId)) {
-					sendMessage(chatId, "Привет, " + optionalUser.get().getFullName() + ", отныне ты администратор!");
+			if (user.isInternal()) {
+				if (user.isAdmin()) {
+					sendMessage(chatId, "Привет, " + name + ", теперь ты администратор!");
 				} else {
-					sendMessage(chatId, "Привет, " + optionalUser.get().getFullName() + ", давно не виделись!");
+					sendMessage(chatId, "Привет, " + name + ", давно не виделись!");
 				}
-			}, () -> {
-				sendMessage(chatId, "Я тебя не знаю, брысь!");
-			});
+			} else if (user.isExternal()) {
+				sendMessage(chatId, "Привет, " + name + "!");
+			} else if (user.isUnknown()) {
+				sendMessage(chatId, "Привет, " + name + ", я тебя не знаю!");
+			}
 		}
 	}
 
