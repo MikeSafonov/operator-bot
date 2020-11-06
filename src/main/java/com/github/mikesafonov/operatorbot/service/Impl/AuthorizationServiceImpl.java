@@ -15,15 +15,15 @@ import com.github.mikesafonov.operatorbot.service.InternalUserService;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
-	@Value("${admin.list}")
 	private Set<Long> userId;
 
 	private final InternalUserService internalUserService;
 	private final ExternalUserService externalUserService;
 
-	public AuthorizationServiceImpl(InternalUserService internalUserService, ExternalUserService externalUserService) {
+	public AuthorizationServiceImpl(InternalUserService internalUserService, ExternalUserService externalUserService, @Value("${admin.list}")Set<Long> userId) {
 		this.internalUserService = internalUserService;
 		this.externalUserService = externalUserService;
+		this.userId = userId;
 
 	}
 
