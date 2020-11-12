@@ -7,16 +7,21 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
+import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.AuthorizationService;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
+import com.github.mikesafonov.operatorbot.service.TimetableService;
 
 @Component
 public class OperatorBot extends TelegramLongPollingBot {
 	private final AuthorizationService userAuthorization;
+	private final TimetableService timetableService;
 
-	public OperatorBot(AuthorizationService userAuthorization) {
+	public OperatorBot(AuthorizationService userAuthorization, TimetableService timetableService) {
 		super();
 		this.userAuthorization = userAuthorization;
+		this.timetableService = timetableService;
 	}
 
 	@Value("${bot.name}")
@@ -34,6 +39,12 @@ public class OperatorBot extends TelegramLongPollingBot {
 			if (user.isInternal()) {
 				if (user.isAdmin()) {
 					sendMessage(chatId, "Привет, " + name + ", теперь ты администратор!");
+					try {
+						Timetable timetable = timetableService.findByTodayDate();
+						sendMessage(chatId, "Дежурный сегодня: " + timetable.getUserId().getFullName());
+					} catch (TodayUserNotFoundException e) {
+						sendMessage(chatId, "Что-то пошло не так! Дежурный на сегодня не назначен!");
+					}
 				} else {
 					sendMessage(chatId, "Привет, " + name + ", давно не виделись!");
 				}
