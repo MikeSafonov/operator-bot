@@ -1,5 +1,6 @@
 package com.github.mikesafonov.operatorbot.service.Impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -45,6 +46,11 @@ public class InternalUserServiceImpl implements InternalUserService {
 		InternalUser user = userRepository.findById(id)
 				.orElseThrow(() -> new UserNotFoundException("User doesn't exist!"));
 		return user;
+	}
+
+	@Override
+	public List<InternalUser> findAll() {
+		return userRepository.findAll();
 	}
 
 }
