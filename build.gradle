@@ -24,6 +24,14 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	implementation "org.flywaydb:flyway-core"
+
+	configurations.all {
+		resolutionStrategy.dependencySubstitution.all { dependency ->
+			if (dependency.requested instanceof ModuleComponentSelector && dependency.requested.module == 'spring-boot-starter-logging') {
+				dependency.useTarget("org.springframework.boot:spring-boot-starter-log4j2:$dependency.requested.version", 'Use Log4j2 instead of Logback')
+			}
+		}
+	}
 }
 
 test {
