@@ -1,5 +1,7 @@
 package com.github.mikesafonov.operatorbot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ import com.github.mikesafonov.operatorbot.service.TimetableService;
 public class OperatorBot extends TelegramLongPollingBot {
 	private final AuthorizationService userAuthorization;
 	private final TimetableService timetableService;
+
+	Logger logger = LoggerFactory.getLogger(OperatorBot.class.getName());
 
 	public OperatorBot(AuthorizationService userAuthorization, TimetableService timetableService) {
 		super();
@@ -45,6 +49,7 @@ public class OperatorBot extends TelegramLongPollingBot {
 						sendMessage(chatId, "Дежурный сегодня: " + timetable.getUserId().getFullName());
 					} catch (TodayUserNotFoundException e) {
 						sendMessage(chatId, "Что-то пошло не так! Дежурный на сегодня не назначен!");
+						logger.error("We have no duty users today!", e);
 					}
 				} else {
 					sendMessage(chatId, "Привет, " + name + ", давно не виделись!");
