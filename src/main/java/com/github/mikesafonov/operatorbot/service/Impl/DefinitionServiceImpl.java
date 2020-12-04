@@ -1,10 +1,8 @@
 package com.github.mikesafonov.operatorbot.service.Impl;
 
+import com.github.mikesafonov.operatorbot.exceptions.ConfigTableNotFoundException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.AdditionalDayOff;
-import com.github.mikesafonov.operatorbot.model.AdditionalWorkday;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
-import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.*;
 import com.github.mikesafonov.operatorbot.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +23,7 @@ public class DefinitionServiceImpl implements DefinitionService {
     private final InternalUserService internalUserService;
     private final AdditionalDayOffService additionalDayOffService;
     private final AdditionalWorkdayService additionalWorkdayService;
+    private final ConfigTableService configService;
     private final Clock clock;
 
     Logger logger = LoggerFactory.getLogger(DefinitionServiceImpl.class.getName());
@@ -32,38 +31,55 @@ public class DefinitionServiceImpl implements DefinitionService {
     public DefinitionServiceImpl(TimetableService timetableService,
                                  InternalUserService internalUserService,
                                  AdditionalDayOffService additionalDayOffService,
-                                 AdditionalWorkdayService additionalWorkdayService, Clock clock) {
+                                 AdditionalWorkdayService additionalWorkdayService, ConfigTableService configService, Clock clock) {
         this.timetableService = timetableService;
         this.internalUserService = internalUserService;
         this.additionalDayOffService = additionalDayOffService;
         this.additionalWorkdayService = additionalWorkdayService;
+        this.configService = configService;
         this.clock = clock;
     }
 
     @Scheduled(cron = "${assignDutyCron}")
     @Override
     public void assignUser() {
-        Optional<AdditionalDayOff> dayOff = additionalDayOffService.findByDay(LocalDate.now());
-        Optional<AdditionalWorkday> workday = additionalWorkdayService.findByDay(LocalDate.now());
-        dayOff.ifPresentOrElse((value) -> logger.debug("Today is day off!"), () -> {
-            DayOfWeek dayOfWeek = LocalDate.now(clock).getDayOfWeek();
-            if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY || workday.isPresent()) {
-                Optional<Timetable> timetable = timetableService.findByDate(LocalDate.now());
-                timetable.ifPresentOrElse((value) -> {
-                    logger.debug("User: " + timetable.get().getUserId().getFullName() + " has already been assigned!");
-                }, () -> {
-                    InternalUser user = internalUserService.findUserByUserStatusAndLastDutyDate();
-                    try {
-                        timetableService.addNote(user.getId(), LocalDate.now());
-                        logger.debug("User: " + user.getFullName() + " is assigned!");
-                    } catch (UserNotFoundException e) {
-                        e.printStackTrace();
-                        logger.error("Expected user for assigning not found!", e);
-                    }
-                });
-            } else {
-                logger.debug("Today is weekend!");
-            }
-        });
+        int additionalDaysForAssign = 0;
+        try {
+            additionalDaysForAssign = Integer.parseInt(configService.findByConfig("configAdditionalDays").getValue());
+        } catch (ConfigTableNotFoundException e) {
+            logger.error("Configuration not found!", e);
+        }
+        for (int i = 0; i <= additionalDaysForAssign; i++) {
+            LocalDate date = LocalDate.now(clock).plusDays(i);
+            Optional<AdditionalDayOff> dayOff = additionalDayOffService.findByDay(date);
+            dayOff.ifPresentOrElse((value) -> logger.debug(date.toString() + " is day off!"), () -> {
+                if (isWorday(date)) {
+                    Optional<Timetable> timetable = timetableService.findByDate(date);
+                    timetable.ifPresentOrElse((value) -> {
+                        logger.debug("User: " + timetable.get().getUserId().getFullName() + " has already been assigned! Date is " + date.toString());
+                    }, () -> {
+                        InternalUser user = internalUserService.findUserByUserStatusAndLastDutyDate();
+                        try {
+                            timetableService.addNote(user.getId(), date);
+                            logger.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
+                        } catch (UserNotFoundException e) {
+                            e.printStackTrace();
+                            logger.error("Expected user for assigning not found!", e);
+                        }
+                    });
+                } else {
+                    logger.debug(date.toString() + " is weekend!");
+                }
+            });
+        }
+    }
+
+    public boolean isWorday(LocalDate date) {
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        if(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY ) {
+            Optional<AdditionalWorkday> workday = additionalWorkdayService.findByDay(date);
+            return workday.isPresent();
+        }
+        return true;
     }
 }

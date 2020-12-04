@@ -5,8 +5,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
 
-import com.github.mikesafonov.operatorbot.model.AdditionalDayOff;
-import com.github.mikesafonov.operatorbot.model.AdditionalWorkday;
+import com.github.mikesafonov.operatorbot.model.*;
 import com.github.mikesafonov.operatorbot.service.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
-import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.Impl.DefinitionServiceImpl;
 
 public class DefinitionServiceTest {
@@ -33,6 +30,8 @@ public class DefinitionServiceTest {
     @Mock
     private AdditionalWorkdayService additionalWorkdayService;
     @Mock
+    private ConfigTableService configService;
+    @Mock
     private Clock clock;
 
     private final LocalDate date = LocalDate.now();
@@ -45,7 +44,7 @@ public class DefinitionServiceTest {
         service = new DefinitionServiceImpl(timetableService,
                 internalUserService,
                 additionalDayOffService,
-                additionalWorkdayService, clock);
+                additionalWorkdayService, configService, clock);
     }
 
     @Test
@@ -100,10 +99,13 @@ public class DefinitionServiceTest {
     @Test
     public void assignUserTestIfUserUnassignedAndWeekday() {
         InternalUser user = new InternalUser();
+        ConfigTable configTable = new ConfigTable();
+        configTable.setValue("0");
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
         Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(configService.findByConfig("amountOfDaysConfig")).thenReturn(configTable);
         service.assignUser();
         try {
             Mockito.verify(timetableService, Mockito.times(1)).addNote(user.getId(), date);
