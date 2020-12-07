@@ -8,6 +8,12 @@ plugins {
 pitest {
 	junit5PluginVersion = '0.12'
 	targetClasses = ['com.github.mikesafonov.operatorbot.service.*']
+	threads = 4
+	outputFormats = ["HTML", "XML"]
+	enableDefaultIncrementalAnalysis = true
+	timestampedReports = false
+	historyInputLocation = ".pitest/pitHistory.txt"
+	historyOutputLocation = ".pitest/pitHistory.txt"
 }
 
 
