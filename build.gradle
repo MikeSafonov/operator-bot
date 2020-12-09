@@ -8,7 +8,7 @@ plugins {
 
 pitest {
 	junit5PluginVersion = '0.12'
-	targetClasses = ['com.github.mikesafonov.operatorbot.service.*']
+	targetClasses = ['com.github.mikesafonov.operatorbot.*']
 	threads = 4
 	outputFormats = ["HTML", "XML"]
 	enableDefaultIncrementalAnalysis = true
