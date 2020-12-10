@@ -40,24 +40,22 @@ public class OperatorBot extends TelegramLongPollingBot {
 			long chatId = update.getMessage().getChatId();
 			String name = update.getMessage().getFrom().getUserName();
 			AuthorizationTelegram user = userAuthorization.getInfo(chatId);
+			String message = update.getMessage().getText();
 
 			if (user.isInternal()) {
 				if (user.isAdmin()) {
-					sendMessage(chatId, "Привет, " + name + ", теперь ты администратор!");
-					try {
-						Timetable timetable = timetableService.findByTodayDate();
-						sendMessage(chatId, "Дежурный сегодня: " + timetable.getUserId().getFullName());
-					} catch (TodayUserNotFoundException e) {
-						sendMessage(chatId, "Что-то пошло не так! Дежурный на сегодня не назначен!");
-						logger.error("We have no duty users today!", e);
+					if(message.equals("/who")) {
+						sendTodayDuty(chatId);
 					}
 				} else {
-					sendMessage(chatId, "Привет, " + name + ", давно не виделись!");
+					if(message.equals("/who")) {
+						sendTodayDuty(chatId);
+					}
 				}
 			} else if (user.isExternal()) {
 				sendMessage(chatId, "Привет, " + name + "!");
 			} else if (user.isUnknown()) {
-				sendMessage(chatId, "Привет, " + name + ", я тебя не знаю!");
+					sendMessage(chatId, "Привет, " + name + ", я тебя не знаю!");
 			}
 		}
 	}
@@ -78,5 +76,15 @@ public class OperatorBot extends TelegramLongPollingBot {
 		} catch (TelegramApiException ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	public void sendTodayDuty(long chatId) {
+			try {
+				Timetable timetable = timetableService.findByTodayDate();
+				sendMessage(chatId, "Дежурный сегодня: " + timetable.getUserId().getFullName());
+			} catch (TodayUserNotFoundException e) {
+				sendMessage(chatId, "Что-то пошло не так! Дежурный на сегодня не назначен!");
+				logger.error("We have no duty users today!", e);
+			}
 	}
 }
