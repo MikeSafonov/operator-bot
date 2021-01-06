@@ -1,5 +1,6 @@
 package com.github.mikesafonov.operatorbot;
 
+import com.github.mikesafonov.operatorbot.service.MessageReciever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,23 +11,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.Timetable;
-import com.github.mikesafonov.operatorbot.service.AuthorizationService;
-import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.TimetableService;
-
 @Component
 public class OperatorBot extends TelegramLongPollingBot {
-	private final AuthorizationService userAuthorization;
-	private final TimetableService timetableService;
+	private final MessageReciever messageReciever;
+	private final Logger logger = LoggerFactory.getLogger(OperatorBot.class.getName());
 
-	Logger logger = LoggerFactory.getLogger(OperatorBot.class.getName());
-
-	public OperatorBot(AuthorizationService userAuthorization, TimetableService timetableService) {
+	public OperatorBot(MessageReciever messageReciever) {
 		super();
-		this.userAuthorization = userAuthorization;
-		this.timetableService = timetableService;
+		this.messageReciever = messageReciever;
 	}
 
 	@Value("${bot.name}")
@@ -37,26 +29,7 @@ public class OperatorBot extends TelegramLongPollingBot {
 	@Override
 	public void onUpdateReceived(Update update) {
 		if (update.getMessage() != null && update.getMessage().hasText()) {
-			long chatId = update.getMessage().getChatId();
-			String name = update.getMessage().getFrom().getUserName();
-			AuthorizationTelegram user = userAuthorization.getInfo(chatId);
-			String message = update.getMessage().getText();
-
-			if (user.isInternal()) {
-				if (user.isAdmin()) {
-					if(message.equals("/who")) {
-						sendTodayDuty(chatId);
-					}
-				} else {
-					if(message.equals("/who")) {
-						sendTodayDuty(chatId);
-					}
-				}
-			} else if (user.isExternal()) {
-				sendMessage(chatId, "Привет, " + name + "!");
-			} else if (user.isUnknown()) {
-					sendMessage(chatId, "Привет, " + name + ", я тебя не знаю!");
-			}
+			sendMessage(messageReciever.analyze(update));
 		}
 	}
 
@@ -74,17 +47,15 @@ public class OperatorBot extends TelegramLongPollingBot {
 		try {
 			execute(new SendMessage(chatId, text));
 		} catch (TelegramApiException ex) {
-			ex.printStackTrace();
+			logger.debug("Message didn't send. " + ex);
 		}
 	}
 
-	public void sendTodayDuty(long chatId) {
-			try {
-				Timetable timetable = timetableService.findByTodayDate();
-				sendMessage(chatId, "Дежурный сегодня: " + timetable.getUserId().getFullName());
-			} catch (TodayUserNotFoundException e) {
-				sendMessage(chatId, "Что-то пошло не так! Дежурный на сегодня не назначен!");
-				logger.error("We have no duty users today!", e);
-			}
+	public void sendMessage(SendMessage sendMessage) {
+		try {
+			execute(sendMessage);
+		} catch (TelegramApiException ex) {
+			logger.debug("Message didn't send. " + ex);
+		}
 	}
 }
