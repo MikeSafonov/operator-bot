@@ -3,6 +3,8 @@ package com.github.mikesafonov.operatorbot.service.Impl;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
@@ -11,23 +13,18 @@ import com.github.mikesafonov.operatorbot.repository.InternalUserRepository;
 import com.github.mikesafonov.operatorbot.service.InternalUserService;
 
 @Service
+@RequiredArgsConstructor
 public class InternalUserServiceImpl implements InternalUserService {
 
 	private final InternalUserRepository userRepository;
 
-	public InternalUserServiceImpl(InternalUserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
 	@Override
 	public InternalUser addUser(InternalUser user) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void deleteUser(Integer id) {
-		// TODO Auto-generated method stub
 
 	}
 

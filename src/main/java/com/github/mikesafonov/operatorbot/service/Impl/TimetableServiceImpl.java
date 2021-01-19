@@ -3,6 +3,8 @@ package com.github.mikesafonov.operatorbot.service.Impl;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
@@ -14,15 +16,11 @@ import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 
 @Service
+@RequiredArgsConstructor
 public class TimetableServiceImpl implements TimetableService {
 
 	private final TimetableRepository timetableRepository;
-	private final InternalUserService internalUserSerivce;
-
-	public TimetableServiceImpl(TimetableRepository timetableRepository, InternalUserService internalUserService) {
-		this.timetableRepository = timetableRepository;
-		this.internalUserSerivce = internalUserService;
-	}
+	private final InternalUserService internalUserService;
 
 	@Override
 	public Timetable findByTodayDate() throws TodayUserNotFoundException {
@@ -45,7 +43,7 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public Timetable addNote(Integer userId, LocalDate date) throws UserNotFoundException {
 		Timetable newNote = new Timetable();
-		InternalUser user = internalUserSerivce.findById(userId);
+		InternalUser user = internalUserService.findById(userId);
 		newNote.setUserId(user);
 		newNote.setTime(date);
 		return timetableRepository.save(newNote);

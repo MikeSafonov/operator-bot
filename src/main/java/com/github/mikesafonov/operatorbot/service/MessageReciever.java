@@ -4,19 +4,17 @@ import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
+@Slf4j
 public class MessageReciever {
     private final AuthorizationService userAuthorization;
     private final Parser parser;
     private final CommandHandlerFactory commandHandlerFactory;
-
-    private final static Logger logger = LoggerFactory.getLogger(MessageReciever.class.getName());
 
     public MessageReciever(AuthorizationService userAuthorization, Parser parser, CommandHandlerFactory commandHandlerFactory) {
         this.userAuthorization = userAuthorization;
