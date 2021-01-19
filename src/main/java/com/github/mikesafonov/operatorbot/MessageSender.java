@@ -7,12 +7,11 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 @Component
 public class MessageSender extends DefaultAbsSender {
-
 	@Value("${bot.token}")
 	private String botToken;
 
-	public MessageSender() {
-		super(new DefaultBotOptions());
+	public MessageSender(DefaultBotOptions options) {
+		super(options);
 	}
 
 	@Override
