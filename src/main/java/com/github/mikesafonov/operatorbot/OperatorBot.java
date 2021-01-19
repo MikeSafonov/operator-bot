@@ -1,23 +1,23 @@
 package com.github.mikesafonov.operatorbot;
 
 import com.github.mikesafonov.operatorbot.service.MessageReciever;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
+@Slf4j
 public class OperatorBot extends TelegramLongPollingBot {
 	private final MessageReciever messageReciever;
-	private final Logger logger = LoggerFactory.getLogger(OperatorBot.class.getName());
 
-	public OperatorBot(MessageReciever messageReciever) {
-		super();
+	public OperatorBot(MessageReciever messageReciever, DefaultBotOptions options) {
+		super(options);
 		this.messageReciever = messageReciever;
 	}
 
@@ -47,7 +47,7 @@ public class OperatorBot extends TelegramLongPollingBot {
 		try {
 			execute(new SendMessage(chatId, text));
 		} catch (TelegramApiException ex) {
-			logger.debug("Message didn't send. " + ex);
+			log.debug("Message didn't send. " + ex);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class OperatorBot extends TelegramLongPollingBot {
 		try {
 			execute(sendMessage);
 		} catch (TelegramApiException ex) {
-			logger.debug("Message didn't send. " + ex);
+			log.debug("Message didn't send. " + ex);
 		}
 	}
 }
