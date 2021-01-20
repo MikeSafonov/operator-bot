@@ -1,19 +1,14 @@
-package com.github.mikesafonov.operatorbot.service.Impl;
+package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.model.AdditionalDayOff;
 import com.github.mikesafonov.operatorbot.repository.AdditionalDayOffRepository;
 import com.github.mikesafonov.operatorbot.service.AdditionalDayOffService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service

@@ -1,14 +1,14 @@
-package com.github.mikesafonov.operatorbot.service.Impl;
+package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.exceptions.ConfigTableNotFoundException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.*;
+import com.github.mikesafonov.operatorbot.model.AdditionalDayOff;
+import com.github.mikesafonov.operatorbot.model.AdditionalWorkday;
+import com.github.mikesafonov.operatorbot.model.InternalUser;
+import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.*;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +47,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 if (isWorday(date)) {
                     Optional<Timetable> timetable = timetableService.findByDate(date);
                     timetable.ifPresentOrElse((value) -> {
-                        log.debug("User: " + timetable.get().getUserId().getFullName() + " has already been assigned! Date is " + date.toString());
+                        log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString());
                     }, () -> {
                         InternalUser user = internalUserService.findUserByUserStatusAndLastDutyDate();
                         try {

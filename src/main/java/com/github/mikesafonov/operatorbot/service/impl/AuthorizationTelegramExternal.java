@@ -1,8 +1,8 @@
-package com.github.mikesafonov.operatorbot.service.Impl;
+package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 
-public class AuthorizationTelegramInternal implements AuthorizationTelegram {
+public class AuthorizationTelegramExternal implements AuthorizationTelegram {
 
 	@Override
 	public boolean isAdmin() {
@@ -11,12 +11,12 @@ public class AuthorizationTelegramInternal implements AuthorizationTelegram {
 
 	@Override
 	public boolean isExternal() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isInternal() {
-		return true;
+		return false;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.github.mikesafonov.operatorbot.service.Impl;
+package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 

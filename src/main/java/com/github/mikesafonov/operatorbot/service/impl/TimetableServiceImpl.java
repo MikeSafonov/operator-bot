@@ -1,11 +1,4 @@
-package com.github.mikesafonov.operatorbot.service.Impl;
-
-import java.time.LocalDate;
-import java.util.Optional;
-
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
@@ -14,6 +7,11 @@ import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.repository.TimetableRepository;
 import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +22,8 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Override
 	public Timetable findByTodayDate() throws TodayUserNotFoundException {
-		Timetable timetable = timetableRepository.findByTime((LocalDate.now()))
+		return timetableRepository.findByTime((LocalDate.now()))
 				.orElseThrow(() -> new TodayUserNotFoundException("User not found!"));
-		return timetable;
 	}
 
 	@Override
