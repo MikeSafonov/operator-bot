@@ -1,12 +1,9 @@
 package com.github.mikesafonov.operatorbot;
 
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Optional;
-
+import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.model.*;
 import com.github.mikesafonov.operatorbot.service.*;
+import com.github.mikesafonov.operatorbot.service.impl.DefinitionServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +11,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.service.Impl.DefinitionServiceImpl;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Optional;
 
 public class DefinitionServiceTest {
     private final static LocalDate LOCAL_DATE_WEEKEND = LocalDate.of(2020, 11, 28); // weekend (Saturday)

@@ -1,5 +1,14 @@
 package com.github.mikesafonov.operatorbot;
 
+import com.github.mikesafonov.operatorbot.model.ExternalUser;
+import com.github.mikesafonov.operatorbot.model.InternalUser;
+import com.github.mikesafonov.operatorbot.service.AuthorizationService;
+import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
+import com.github.mikesafonov.operatorbot.service.ExternalUserService;
+import com.github.mikesafonov.operatorbot.service.InternalUserService;
+import com.github.mikesafonov.operatorbot.service.impl.AuthorizationServiceImpl;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -8,16 +17,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-
-import com.github.mikesafonov.operatorbot.model.ExternalUser;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
-import com.github.mikesafonov.operatorbot.service.AuthorizationService;
-import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.ExternalUserService;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
-import com.github.mikesafonov.operatorbot.service.Impl.AuthorizationServiceImpl;
 
 public class AuthorizationServiceTest {
 	@Mock
