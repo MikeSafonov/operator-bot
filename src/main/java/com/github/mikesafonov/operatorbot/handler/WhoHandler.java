@@ -5,14 +5,12 @@ import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+@Slf4j
 public class WhoHandler implements CommandHandler {
     private final TimetableService timetableService;
-
-    private final static Logger logger = LoggerFactory.getLogger(WhoHandler.class.getName());
 
     public WhoHandler(TimetableService timetableService) {
         this.timetableService = timetableService;
@@ -40,7 +38,7 @@ public class WhoHandler implements CommandHandler {
             sendMessage.setChatId(chatId).setText("Дежурный сегодня: " + timetable.getUserId().getFullName());
         } catch (TodayUserNotFoundException e) {
             sendMessage.setChatId(chatId).setText("Что-то пошло не так! Дежурный на сегодня не назначен!");
-            logger.error("We have no duty users today!", e);
+            log.error("We have no duty users today!", e);
         }
         return sendMessage;
     }
