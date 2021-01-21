@@ -1,16 +1,9 @@
 package com.github.mikesafonov.operatorbot.model;
 
-
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.time.LocalDate;
-
 
 @Entity
 @Table(name = "additional_day_off")
