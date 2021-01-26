@@ -1,7 +1,11 @@
 package com.github.mikesafonov.operatorbot.messageReciever;
 
 import com.github.mikesafonov.operatorbot.command.Command;
+import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.*;
+import com.github.mikesafonov.operatorbot.handler.admin.AddHandler;
+import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
+import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,12 +15,16 @@ import org.mockito.Mock;
 public class CommandHandlerFactoryTest {
     @Mock
     private TimetableService timetableService;
+    @Mock
+    private InternalUserService internalUserService;
+    @Mock
+    private Parser parser;
 
     private CommandHandlerFactory commandHandlerFactory;
 
     @BeforeEach
     public void setUp() {
-        commandHandlerFactory = new CommandHandlerFactory(timetableService);
+        commandHandlerFactory = new CommandHandlerFactory(timetableService, internalUserService, parser);
     }
 
     @Test
@@ -47,5 +55,11 @@ public class CommandHandlerFactoryTest {
     public void shouldReturnWhoHandler() {
         CommandHandler actual = commandHandlerFactory.createNewHandler(Command.WHO);
         Assertions.assertEquals(WhoHandler.class, actual.getClass());
+    }
+
+    @Test
+    public void shouldReturnAdminHandler() {
+        CommandHandler actual = commandHandlerFactory.createNewHandler(Command.ADD);
+        Assertions.assertEquals(AddHandler.class, actual.getClass());
     }
 }

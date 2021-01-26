@@ -5,5 +5,7 @@ public enum Command {
 
     START, HELP, ROLE,
 
-    WHO
+    WHO,
+
+    ADD
 }

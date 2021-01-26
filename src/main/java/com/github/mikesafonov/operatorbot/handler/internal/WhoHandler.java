@@ -1,7 +1,8 @@
-package com.github.mikesafonov.operatorbot.handler;
+package com.github.mikesafonov.operatorbot.handler.internal;
 
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
+import com.github.mikesafonov.operatorbot.handler.CommandHandler;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
