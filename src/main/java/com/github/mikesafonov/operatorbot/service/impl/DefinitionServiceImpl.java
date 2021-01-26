@@ -46,18 +46,9 @@ public class DefinitionServiceImpl implements DefinitionService {
             dayOff.ifPresentOrElse((value) -> log.debug(date.toString() + " is day off!"), () -> {
                 if (isWorday(date)) {
                     Optional<Timetable> timetable = timetableService.findByDate(date);
-                    timetable.ifPresentOrElse((value) -> {
-                        log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString());
-                    }, () -> {
-                        InternalUser user = internalUserService.findUserByUserStatusAndLastDutyDate();
-                        try {
-                            timetableService.addNote(user.getId(), date);
-                            log.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
-                        } catch (UserNotFoundException e) {
-                            e.printStackTrace();
-                            log.error("Expected user for assigning not found!", e);
-                        }
-                    });
+                    timetable.ifPresentOrElse((value) ->
+                                    log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString()),
+                            () -> findAndAssignUser(date));
                 } else {
                     log.debug(date.toString() + " is weekend!");
                 }
@@ -72,5 +63,24 @@ public class DefinitionServiceImpl implements DefinitionService {
             return workday.isPresent();
         }
         return true;
+    }
+
+    private void assignUser(InternalUser user, LocalDate date) {
+        try {
+            timetableService.addNote(user.getId(), date);
+            log.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            log.error("Expected user for assigning not found!", e);
+        }
+    }
+
+    private void findAndAssignUser(LocalDate date) {
+        Optional<InternalUser> user = internalUserService.findUserByUserStatusAndLastDutyDate();
+        user.ifPresentOrElse((value) -> assignUser(user.get(), date), () -> {
+            Optional<InternalUser> firstDuty = internalUserService.findFirstOrderByFullName();
+            firstDuty.ifPresentOrElse((value) -> assignUser(firstDuty.get(), date),
+                    () -> log.error("No users, no one to assign!"));
+        });
     }
 }

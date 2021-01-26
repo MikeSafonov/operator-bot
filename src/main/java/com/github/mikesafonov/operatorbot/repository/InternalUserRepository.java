@@ -16,7 +16,9 @@ public interface InternalUserRepository extends JpaRepository<InternalUser, Inte
 			+ "GROUP BY um.user_id "
 			+ "ORDER BY um.maxDate ASC "
 			+ "LIMIT 1) as mu)")
-	InternalUser findUserByUserStatusAndLastDutyDate();
+	Optional<InternalUser> findUserByUserStatusAndLastDutyDate();
+
+	Optional<InternalUser> findFirstByOrderByFullNameAsc();
 	
 	Optional<InternalUser> findByTelegramId(long telegramId);
 }

@@ -16,7 +16,9 @@ public interface InternalUserService {
 
 	void deleteUser(Integer id);
 
-	InternalUser findUserByUserStatusAndLastDutyDate();
+	Optional<InternalUser> findUserByUserStatusAndLastDutyDate();
+
+	Optional<InternalUser> findFirstOrderByFullName();
 
 	InternalUser findById(Integer id) throws UserNotFoundException;
 }
