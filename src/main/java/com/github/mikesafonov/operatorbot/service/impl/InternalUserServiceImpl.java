@@ -42,8 +42,13 @@ public class InternalUserServiceImpl implements InternalUserService {
 	}
 
 	@Override
-	public InternalUser findUserByUserStatusAndLastDutyDate() {
+	public Optional<InternalUser> findUserByUserStatusAndLastDutyDate() {
 		return userRepository.findUserByUserStatusAndLastDutyDate();
+	}
+
+	@Override
+	public Optional<InternalUser> findFirstOrderByFullName() {
+		return userRepository.findFirstByOrderByFullNameAsc();
 	}
 
 	@Override

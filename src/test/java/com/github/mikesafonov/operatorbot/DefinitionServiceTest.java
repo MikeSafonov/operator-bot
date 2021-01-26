@@ -37,6 +37,10 @@ public class DefinitionServiceTest {
     private DefinitionService service;
     private Clock fixedClock;
 
+    private final InternalUser user = new InternalUser();
+    private final InternalUser lastUser = new InternalUser();
+    private final ConfigTable configTable = new ConfigTable();
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -49,18 +53,15 @@ public class DefinitionServiceTest {
     @Test
     public void assignUserTestIfUserAssignedAndWeekend() throws UserNotFoundException {
         Timetable assigned = new Timetable();
-        InternalUser firstUser = new InternalUser();
-        InternalUser lastUser = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-        assigned.setUserId(firstUser);
+        assigned.setUserId(user);
 
         fixedClock = Clock.fixed(LOCAL_DATE_WEEKEND.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
 
         Mockito.when(timetableService.findByDate(date)).thenReturn(Optional.of(assigned));
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(lastUser);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(lastUser));
 
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
         service.assignUser();
@@ -70,17 +71,15 @@ public class DefinitionServiceTest {
     @Test
     public void assignUserTestIfUserAssignedAndWeekday() throws UserNotFoundException {
         Timetable assigned = new Timetable();
-        InternalUser firstUser = new InternalUser();
-        InternalUser lastUser = new InternalUser();ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-        assigned.setUserId(firstUser);
+        assigned.setUserId(user);
 
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
 
         Mockito.when(timetableService.findByDate(date)).thenReturn(Optional.of(assigned));
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(lastUser);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(lastUser));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
         service.assignUser();
         Mockito.verify(timetableService, Mockito.times(0)).addNote(lastUser.getId(), date);
@@ -88,13 +87,11 @@ public class DefinitionServiceTest {
 
     @Test
     public void assignUserTestIfUserUnassignedAndWeekend() {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
         fixedClock = Clock.fixed(LOCAL_DATE_WEEKEND.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
         service.assignUser();
         try {
@@ -106,13 +103,11 @@ public class DefinitionServiceTest {
 
     @Test
     public void assignUserTestIfUserUnassignedAndWeekday() {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
         service.assignUser();
         for(int i = 0; i < Integer.parseInt(configTable.getValue()); i++) {
@@ -126,14 +121,14 @@ public class DefinitionServiceTest {
 
     @Test
     public void assignUserForFewDaysTestIfUserUnassignedAndWeekday() {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("4");
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
+
         service.assignUser();
         for(int i = 0; i < Integer.parseInt(configTable.getValue()); i++) {
             try {
@@ -146,30 +141,28 @@ public class DefinitionServiceTest {
 
     @Test
     public void assignUserTestIfUserNotFoundAndWeekday() {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
+
         service.assignUser();
         Assertions.assertThatExceptionOfType(UserNotFoundException.class);
     }
 
     @Test
     public void assignUserTestIfUserNotFoundAndWeekend() {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-
         fixedClock = Clock.fixed(LOCAL_DATE_WEEKEND.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
+
         service.assignUser();
         Assertions.assertThatExceptionOfType(UserNotFoundException.class);
     }
@@ -177,52 +170,64 @@ public class DefinitionServiceTest {
     @Test
     public void assignUserTestIfUserAssignedAndDayOff() throws UserNotFoundException {
         Timetable assigned = new Timetable();
-        InternalUser firstUser = new InternalUser();
-        InternalUser lastUser = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-        assigned.setUserId(firstUser);
-
+        assigned.setUserId(user);
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
         Mockito.when(timetableService.findByDate(date)).thenReturn(Optional.of(assigned));
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(lastUser);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(lastUser));
         Mockito.when(additionalDayOffService.findByDay(date)).thenReturn(Optional.of(new AdditionalDayOff()));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
+
         service.assignUser();
         Mockito.verify(timetableService, Mockito.times(0)).addNote(lastUser.getId(), date);
     }
 
     @Test
     public void assignUserTestIfUserUnassignedAndDayOffWithWeekday() throws UserNotFoundException {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-
         fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(additionalDayOffService.findByDay(LocalDate.now(fixedClock))).thenReturn(Optional.of(new AdditionalDayOff()));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
+
         service.assignUser();
         Mockito.verify(timetableService, Mockito.times(0)).addNote(user.getId(), date);
     }
 
     @Test
     public void assignUserTestIfUserUnassignedAndWeekendButWorkday() throws UserNotFoundException {
-        InternalUser user = new InternalUser();
-        ConfigTable configTable = new ConfigTable();
         configTable.setValue("0");
-
         fixedClock = Clock.fixed(LOCAL_DATE_WEEKEND.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(user);
+        Mockito.when(internalUserService.findUserByUserStatusAndLastDutyDate()).thenReturn(Optional.of(user));
         Mockito.when(additionalWorkdayService.findByDay(LocalDate.now(fixedClock))).thenReturn(Optional.of(new AdditionalWorkday()));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
         Mockito.when(internalUserService.findById(user.getId())).thenReturn(user);
+
+        service.assignUser();
+        Mockito.verify(timetableService, Mockito.times(1)).addNote(user.getId(), LocalDate.now(fixedClock));
+    }
+
+    @Test
+    public void assignUserTestIfIsFirstDuty() throws UserNotFoundException {
+        configTable.setValue("0");
+        fixedClock = Clock.fixed(LOCAL_DATE_WEEKEND.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
+        Mockito.doReturn(fixedClock.instant()).when(clock).instant();
+        Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
+        Mockito.when(internalUserService.findFirstOrderByFullName()).thenReturn(Optional.of(user));
+        Mockito.when(additionalWorkdayService.findByDay(LocalDate.now(fixedClock))).thenReturn(Optional.of(new AdditionalWorkday()));
+        Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
+        Mockito.when(internalUserService.findById(user.getId())).thenReturn(user);
+
         service.assignUser();
         Mockito.verify(timetableService, Mockito.times(1)).addNote(user.getId(), LocalDate.now(fixedClock));
     }
