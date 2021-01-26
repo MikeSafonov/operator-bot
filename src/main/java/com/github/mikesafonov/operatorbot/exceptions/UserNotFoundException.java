@@ -1,6 +1,6 @@
 package com.github.mikesafonov.operatorbot.exceptions;
 
-public class UserNotFoundException extends Exception {
+public class UserNotFoundException extends RuntimeException {
 	public UserNotFoundException(String errorMessage) {
 		super(errorMessage);
 	}
