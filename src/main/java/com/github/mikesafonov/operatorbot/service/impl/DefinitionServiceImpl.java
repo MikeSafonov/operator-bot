@@ -44,11 +44,11 @@ public class DefinitionServiceImpl implements DefinitionService {
             LocalDate date = LocalDate.now(clock).plusDays(i);
             Optional<AdditionalDayOff> dayOff = additionalDayOffService.findByDay(date);
             dayOff.ifPresentOrElse((value) -> log.debug(date.toString() + " is day off!"), () -> {
-                if (isWorday(date)) {
+                if (isWorkday(date)) {
                     Optional<Timetable> timetable = timetableService.findByDate(date);
-                    timetable.ifPresentOrElse((value) ->
-                                    log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString()),
-                            () -> findAndAssignUser(date));
+                    timetable.ifPresentOrElse(
+                            (value) -> log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString()),
+                            () -> assignUser(getUserForDuty(), date));
                 } else {
                     log.debug(date.toString() + " is weekend!");
                 }
@@ -56,7 +56,7 @@ public class DefinitionServiceImpl implements DefinitionService {
         }
     }
 
-    public boolean isWorday(LocalDate date) {
+    public boolean isWorkday(LocalDate date) {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         if(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY ) {
             Optional<AdditionalWorkday> workday = additionalWorkdayService.findByDay(date);
@@ -75,12 +75,9 @@ public class DefinitionServiceImpl implements DefinitionService {
         }
     }
 
-    private void findAndAssignUser(LocalDate date) {
-        Optional<InternalUser> user = internalUserService.findUserByUserStatusAndLastDutyDate();
-        user.ifPresentOrElse((value) -> assignUser(user.get(), date), () -> {
-            Optional<InternalUser> firstDuty = internalUserService.findFirstOrderByFullName();
-            firstDuty.ifPresentOrElse((value) -> assignUser(firstDuty.get(), date),
-                    () -> log.error("No users, no one to assign!"));
-        });
+    private InternalUser getUserForDuty() throws UserNotFoundException {
+        return internalUserService.findUserByUserStatusAndLastDutyDate()
+                .or(() -> internalUserService.findFirstOrderByFullName())
+                .orElseThrow(()-> new UserNotFoundException("No users! No one to appoint for duty!"));
     }
 }
