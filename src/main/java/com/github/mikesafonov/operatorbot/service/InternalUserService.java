@@ -1,17 +1,18 @@
 package com.github.mikesafonov.operatorbot.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.github.mikesafonov.operatorbot.exceptions.UserAlreadyExistException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.model.InternalUser;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface InternalUserService {
 	Optional<InternalUser> findByTelegramId(long telegramId);
 	
 	List<InternalUser> findAll();
 
-	InternalUser addUser(InternalUser user);
+	InternalUser addUser(long telegramId, String full_name) throws UserAlreadyExistException;
 
 	void deleteUser(Integer id);
 

@@ -14,8 +14,19 @@ public class Parser {
         }
     }
 
+    public String getParamValue(String message, int paramIndex, int limit) {
+        String[] text = getTextWithoutCommand(message).split(" ", limit);
+        if(paramIndex < text.length && paramIndex >= 0) {
+            return text[paramIndex];
+        }
+        else {
+            return null;
+        }
+    }
+
     private Command getCommandFromText(String text) {
-        String upperCaseText = text.substring(1).toUpperCase().trim();
+        String[] delimitedText = text.split(" ", 2);
+        String upperCaseText = delimitedText[0].substring(1).toUpperCase().trim();
         Command command = Command.NONE;
         try {
             command = Command.valueOf(upperCaseText);
@@ -23,5 +34,10 @@ public class Parser {
             log.debug("Can't parse command: " + text);
         }
         return command;
+    }
+
+    private String getTextWithoutCommand(String text) {
+        String[] delimitedText = text.split(" ", 2);
+        return delimitedText[1];
     }
 }

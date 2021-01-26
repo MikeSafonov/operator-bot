@@ -56,4 +56,17 @@ public class ParserTest {
         ParsedCommand expected = new ParsedCommand(Command.NONE, "/unknownCommand");
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    public void shouldReturnFirstParamFromCommand() {
+        String actual = parser.getParamValue("/command param1 param2", 0, 2);
+        String expected = "param1";
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldReturnNoParamFromCommand() {
+        String actual = parser.getParamValue("/command param1 param2", 3, 1);
+        Assertions.assertNull(actual);
+    }
 }

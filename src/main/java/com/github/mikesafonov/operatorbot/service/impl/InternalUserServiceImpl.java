@@ -1,7 +1,9 @@
 package com.github.mikesafonov.operatorbot.service.impl;
 
+import com.github.mikesafonov.operatorbot.exceptions.UserAlreadyExistException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.model.InternalUser;
+import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.repository.InternalUserRepository;
 import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,16 @@ public class InternalUserServiceImpl implements InternalUserService {
 	private final InternalUserRepository userRepository;
 
 	@Override
-	public InternalUser addUser(InternalUser user) {
-		return null;
+	public InternalUser addUser(long telegramId, String fullName) throws UserAlreadyExistException {
+		if(userRepository.findByTelegramId(telegramId).isPresent()){
+			throw new UserAlreadyExistException("");
+		} else {
+		InternalUser user = new InternalUser();
+		user.setTelegramId(telegramId);
+		user.setFullName(fullName);
+		user.setStatus(Status.ACITVE);
+		return userRepository.save(user);
+		}
 	}
 
 	@Override
