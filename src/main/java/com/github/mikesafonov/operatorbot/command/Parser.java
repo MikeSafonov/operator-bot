@@ -1,5 +1,6 @@
 package com.github.mikesafonov.operatorbot.command;
 
+import com.github.mikesafonov.operatorbot.exceptions.ParserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,11 @@ public class Parser {
     }
 
     private String getTextWithoutCommand(String text) {
-        String[] delimitedText = text.split(" ", 2);
-        return delimitedText[1];
+        try {
+            String[] delimitedText = text.split(" ", 2);
+            return delimitedText[1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ParserException("Can't delimit text from command!");
+        }
     }
 }

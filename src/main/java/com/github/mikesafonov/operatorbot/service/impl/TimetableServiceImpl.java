@@ -8,6 +8,8 @@ import com.github.mikesafonov.operatorbot.repository.TimetableRepository;
 import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,6 +31,11 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public Optional<Timetable> findByDate(LocalDate date) {
 		return timetableRepository.findByTime(date);
+	}
+
+	@Override
+	public Page<Timetable> findUsersDutyInFuture(InternalUser user, int amount) {
+		return timetableRepository.findUsersDutyInFuture(user, PageRequest.of(0, amount));
 	}
 
 	@Override

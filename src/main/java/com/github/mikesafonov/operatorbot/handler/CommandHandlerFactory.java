@@ -3,6 +3,7 @@ package com.github.mikesafonov.operatorbot.handler;
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.admin.AddHandler;
+import com.github.mikesafonov.operatorbot.handler.internal.WhenMeHandler;
 import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
 import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
@@ -28,6 +29,8 @@ public class CommandHandlerFactory {
                 return new WhoHandler(timetableService);
             case ADD:
                 return new AddHandler(internalUserService, parser);
+            case WHEN_MY_DUTY:
+                return new WhenMeHandler(timetableService, internalUserService, parser);
             default:
                 return new DefaultHandler();
         }
