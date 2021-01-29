@@ -48,7 +48,7 @@ public class WhenMeHandlerTest {
         handler = new WhenMeHandler(timetableService, internalUserService, parser);
         internalUser.setTelegramId(1);
         internalUser.setFullName("N U P");
-        internalUser.setStatus(Status.ACITVE);
+        internalUser.setStatus(Status.ACTIVE);
     }
 
     @Test

@@ -26,7 +26,7 @@ public class InternalUserServiceImpl implements InternalUserService {
 		InternalUser user = new InternalUser();
 		user.setTelegramId(telegramId);
 		user.setFullName(fullName);
-		user.setStatus(Status.ACITVE);
+		user.setStatus(Status.ACTIVE);
 		return userRepository.save(user);
 		}
 	}
