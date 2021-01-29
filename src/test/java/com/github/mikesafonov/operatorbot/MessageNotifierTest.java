@@ -32,7 +32,7 @@ public class MessageNotifierTest {
         messageNotifier = new MessageNotifier(timetableService, messageSender);
         duty.setTelegramId(0);
         duty.setFullName("Duty");
-        duty.setStatus(Status.ACITVE);
+        duty.setStatus(Status.ACTIVE);
         timetable.setUserId(duty);
         id = duty.getTelegramId();
         message = (timetable.getUserId().getFullName() + ", ты сегодня дежурный!");
