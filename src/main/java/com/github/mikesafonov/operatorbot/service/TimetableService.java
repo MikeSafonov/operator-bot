@@ -16,7 +16,7 @@ public interface TimetableService {
 
 	Page<Timetable> findUsersDutyInFuture(InternalUser user, int amount);
 
-	void updateUserDate(LocalDate date, Integer id);
+	void updateUserDate(LocalDate date, InternalUser user);
 
 	Timetable addNote(Integer userId, LocalDate date) throws UserNotFoundException;
 }
