@@ -5,7 +5,7 @@ public enum Command {
 
     START, HELP, ROLE,
 
-    WHO, WHEN_MY_DUTY,
+    WHO, WHEN_MY_DUTY, UPDATE_DUTY,
 
     ADD
 }

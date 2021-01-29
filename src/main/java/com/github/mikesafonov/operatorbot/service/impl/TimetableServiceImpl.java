@@ -11,12 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TimetableServiceImpl implements TimetableService {
 
 	private final TimetableRepository timetableRepository;
@@ -39,9 +41,8 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public void updateUserDate(LocalDate date, Integer id) {
-		timetableRepository.updateUserDate(date, id);
-
+	public void updateUserDate(LocalDate date, InternalUser user) {
+		timetableRepository.updateUserDate(date, user);
 	}
 
 	@Override
