@@ -1,12 +1,13 @@
 package com.github.mikesafonov.operatorbot.handler.admin;
 
+import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.CommandFormatException;
 import com.github.mikesafonov.operatorbot.exceptions.UserAlreadyExistException;
 import com.github.mikesafonov.operatorbot.handler.CommandHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,21 +15,26 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @RequiredArgsConstructor
 @Slf4j
 public class AddHandler implements CommandHandler {
-    private final InternalUserService internalUserService;
+    private final UserService userService;
     private final Parser parser;
 
     @Override
     public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
-        return getAddingMessage(chatId, user, parsedCommand.getText());
+        return getAddingMessage(chatId, user, parsedCommand);
     }
 
-    private SendMessage getAddingMessage(long chatId, AuthorizationTelegram user, String message) {
+    private SendMessage getAddingMessage(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         if (user.isAdmin()) {
             try {
-                addUser(message);
-                sendMessage.setText("Пользователь успешно добавлен!");
+                if(parsedCommand.getCommand().equals(Command.ADD_USER)) {
+                    addUser(parsedCommand.getText());
+                    sendMessage.setText("Пользователь успешно добавлен!");
+                } else if(parsedCommand.getCommand().equals(Command.ADD_DUTY)) {
+                    addDutyUser(parsedCommand.getText());
+                    sendMessage.setText("Пользователь-дежурный успешно добавлен!");
+                }
             } catch (UserAlreadyExistException e) {
                 log.error("User with this id already exists!", e);
                 sendMessage.setText("Пользователь с таким id уже существует!");
@@ -46,12 +52,20 @@ public class AddHandler implements CommandHandler {
         Long id = getIdFromMessage(message);
         String fullName = getFullNameFromMessage(message);
         if (id != null && fullName != null) {
-            id.longValue();
-            internalUserService.addUser(id, fullName);
+            userService.addUser(id, fullName);
         } else {
             throw new CommandFormatException("Incorrect command format!");
         }
+    }
 
+    private void addDutyUser(String message) throws UserAlreadyExistException {
+        Long id = getIdFromMessage(message);
+        String fullName = getFullNameFromMessage(message);
+        if (id != null && fullName != null) {
+            userService.addUserDuty(id, fullName);
+        } else {
+            throw new CommandFormatException("Incorrect command format!");
+        }
     }
 
     private Long getIdFromMessage(String message) {

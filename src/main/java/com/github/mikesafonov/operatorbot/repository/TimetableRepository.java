@@ -1,7 +1,7 @@
 package com.github.mikesafonov.operatorbot.repository;
 
-import com.github.mikesafonov.operatorbot.model.InternalUser;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,8 +17,8 @@ public interface TimetableRepository extends JpaRepository<Timetable, Integer> {
 
 	@Modifying
 	@Query("UPDATE Timetable u SET u.userId = :userId WHERE u.time = :date")
-	void updateUserDate(@Param(value = "date") LocalDate date, @Param(value = "userId") InternalUser user);
+	void updateUserDate(@Param(value = "date") LocalDate date, @Param(value = "userId") User user);
 
 	@Query("SELECT t FROM Timetable t WHERE t.time <= current_date AND t.userId = :userId")
-	Page<Timetable> findUsersDutyInFuture(@Param(value="userId") InternalUser user, Pageable pageable);
+	Page<Timetable> findUsersDutyInFuture(@Param(value="userId") User user, Pageable pageable);
 }

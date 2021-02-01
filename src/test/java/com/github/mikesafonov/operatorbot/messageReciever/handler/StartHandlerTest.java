@@ -30,9 +30,9 @@ public class StartHandlerTest {
 
     @Test
     public void shouldReturnStartMessageWithAdmin() {
-        AuthorizationTelegram user = new AuthorizationTelegramAdmin();
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
 
-        SendMessage actual = startHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
@@ -40,9 +40,9 @@ public class StartHandlerTest {
 
     @Test
     public void shouldReturnStartMessageWithInternalUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramInternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramInternal();
 
-        SendMessage actual = startHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
@@ -50,9 +50,9 @@ public class StartHandlerTest {
 
     @Test
     public void shouldReturnStartMessageWithExternalUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramExternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramExternal();
 
-        SendMessage actual = startHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
@@ -60,9 +60,9 @@ public class StartHandlerTest {
 
     @Test
     public void shouldReturnStartMessageWithUnknownUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramUnknown();
+        AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
-        SendMessage actual = startHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);

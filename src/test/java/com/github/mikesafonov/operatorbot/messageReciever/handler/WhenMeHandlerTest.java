@@ -4,12 +4,12 @@ import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.internal.WhenMeHandler;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
 import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,28 +27,28 @@ import java.util.Optional;
 
 public class WhenMeHandlerTest {
     @Mock
-    private InternalUserService internalUserService;
+    private UserService userService;
     @Mock
     private TimetableService timetableService;
     @Mock
     private Parser parser;
     @Mock
-    private AuthorizationTelegram user;
+    private AuthorizationTelegram authorization;
 
     private WhenMeHandler handler;
 
     private final String message = "/when_my_duty 1";
     private final ParsedCommand parsedCommand = new ParsedCommand();
-    private final InternalUser internalUser = new InternalUser();
+    private final User user = new User();
     private final List<Timetable> timetableList = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        handler = new WhenMeHandler(timetableService, internalUserService, parser);
-        internalUser.setTelegramId(1);
-        internalUser.setFullName("N U P");
-        internalUser.setStatus(Status.ACTIVE);
+        handler = new WhenMeHandler(timetableService, userService, parser);
+        user.setTelegramId(1);
+        user.setFullName("N U P");
+        user.setStatus(Status.ACTIVE);
     }
 
     @Test
@@ -74,9 +74,9 @@ public class WhenMeHandlerTest {
         timetableList.add(fifth);
         Page page = new PageImpl(timetableList);
 
-        Mockito.when(user.isInternal()).thenReturn(true);
-        Mockito.when(internalUserService.findByTelegramId(1)).thenReturn(Optional.of(internalUser));
-        Mockito.when(timetableService.findUsersDutyInFuture(internalUser, 2)).thenReturn(page);
+        Mockito.when(authorization.isInternal()).thenReturn(true);
+        Mockito.when(userService.findByTelegramId(1)).thenReturn(Optional.of(user));
+        Mockito.when(timetableService.findUsersDutyInFuture(user, 2)).thenReturn(page);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 1)).thenReturn("2");
 
         StringBuilder text = new StringBuilder();
@@ -85,8 +85,8 @@ public class WhenMeHandlerTest {
             text.append(timetableList.get(i).getTime().toString()).append("\n");
         }
 
-        SendMessage actual = handler.operate(internalUser.getTelegramId(), user, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(internalUser.getTelegramId()).setText(text.toString());
+        SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
+        SendMessage expected = new SendMessage().setChatId(user.getTelegramId()).setText(text.toString());
 
         Assertions.assertEquals(expected, actual);
     }
@@ -97,15 +97,15 @@ public class WhenMeHandlerTest {
         parsedCommand.setText(message);
         Page page = new PageImpl(timetableList);
 
-        Mockito.when(user.isInternal()).thenReturn(true);
-        Mockito.when(internalUserService.findByTelegramId(1)).thenReturn(Optional.of(internalUser));
+        Mockito.when(authorization.isInternal()).thenReturn(true);
+        Mockito.when(userService.findByTelegramId(1)).thenReturn(Optional.of(user));
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 1)).thenReturn("2");
-        Mockito.when(timetableService.findUsersDutyInFuture(internalUser, 2)).thenReturn(page);
+        Mockito.when(timetableService.findUsersDutyInFuture(user, 2)).thenReturn(page);
 
         String text = "Ближайшие дежурства не назначены!";
 
-        SendMessage actual = handler.operate(internalUser.getTelegramId(), user, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(internalUser.getTelegramId()).setText(text);
+        SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
+        SendMessage expected = new SendMessage().setChatId(user.getTelegramId()).setText(text);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -115,12 +115,12 @@ public class WhenMeHandlerTest {
         parsedCommand.setCommand(Command.WHEN_MY_DUTY);
         parsedCommand.setText(message);
 
-        Mockito.when(user.isInternal()).thenReturn(false);
+        Mockito.when(authorization.isInternal()).thenReturn(false);
 
         String text = "Команда не доступна!";
 
-        SendMessage actual = handler.operate(internalUser.getTelegramId(), user, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(internalUser.getTelegramId()).setText(text);
+        SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
+        SendMessage expected = new SendMessage().setChatId(user.getTelegramId()).setText(text);
 
         Assertions.assertEquals(expected, actual);
     }

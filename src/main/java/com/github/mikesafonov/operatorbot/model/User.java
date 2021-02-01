@@ -2,17 +2,12 @@ package com.github.mikesafonov.operatorbot.model;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "internal_users")
+@Table(name = "users")
 @Data
-public class InternalUser {
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -22,4 +17,6 @@ public class InternalUser {
 	private long telegramId;
 	@Column(name = "status")
 	private Status status;
+	@Column(name = "role")
+	private Role role;
 }

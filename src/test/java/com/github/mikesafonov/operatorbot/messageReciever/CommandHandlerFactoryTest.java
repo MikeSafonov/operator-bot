@@ -5,8 +5,8 @@ import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.*;
 import com.github.mikesafonov.operatorbot.handler.admin.AddHandler;
 import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class CommandHandlerFactoryTest {
     @Mock
     private TimetableService timetableService;
     @Mock
-    private InternalUserService internalUserService;
+    private UserService userService;
     @Mock
     private Parser parser;
 
@@ -24,7 +24,7 @@ public class CommandHandlerFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        commandHandlerFactory = new CommandHandlerFactory(timetableService, internalUserService, parser);
+        commandHandlerFactory = new CommandHandlerFactory(timetableService, userService, parser);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class CommandHandlerFactoryTest {
 
     @Test
     public void shouldReturnAdminHandler() {
-        CommandHandler actual = commandHandlerFactory.createNewHandler(Command.ADD);
+        CommandHandler actual = commandHandlerFactory.createNewHandler(Command.ADD_USER);
         Assertions.assertEquals(AddHandler.class, actual.getClass());
     }
 }

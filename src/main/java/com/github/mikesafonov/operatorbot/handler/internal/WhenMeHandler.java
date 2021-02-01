@@ -7,8 +7,8 @@ import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.handler.CommandHandler;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WhenMeHandler implements CommandHandler {
     private final TimetableService timetableService;
-    private final InternalUserService internalUserService;
+    private final UserService userService;
     private final Parser parser;
 
 
@@ -49,7 +49,7 @@ public class WhenMeHandler implements CommandHandler {
     }
 
     private List<Timetable> getListOfDuties(long chatId, int amount) {
-        return internalUserService.findByTelegramId(chatId)
+        return userService.findByTelegramId(chatId)
                 .map(user -> timetableService.findUsersDutyInFuture(user, amount))
                 .map(Slice::getContent)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));

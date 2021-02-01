@@ -21,36 +21,36 @@ public class DefaultHandlerTest {
 
     @Test
     public void shouldReturnDefaultMessageWithAdmin() {
-        AuthorizationTelegram user = new AuthorizationTelegramAdmin();
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
 
-        SendMessage actual = defaultHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnDefaultMessageWithInternalUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramInternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramInternal();
 
-        SendMessage actual = defaultHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnDefaultMessageWithExternal() {
-        AuthorizationTelegram user = new AuthorizationTelegramExternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramExternal();
 
-        SendMessage actual = defaultHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnDefaultMessageWithUnknown() {
-        AuthorizationTelegram user = new AuthorizationTelegramUnknown();
+        AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
-        SendMessage actual = defaultHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
         Assertions.assertEquals(expected, actual);
     }
