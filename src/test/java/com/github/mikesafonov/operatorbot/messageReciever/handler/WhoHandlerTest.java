@@ -4,8 +4,8 @@ import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
 import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
@@ -29,7 +29,7 @@ public class WhoHandlerTest {
     private final long chatId = 0;
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.WHO, "/who");
     private final Timetable timetable = new Timetable();
-    private final InternalUser duty = new InternalUser();
+    private final User duty = new User();
     private final String text = "Дежурный сегодня: ";
     private final String textWhenNoDuty = "Что-то пошло не так! Дежурный на сегодня не назначен!";
     private final String textWhenNoAccess = "Команда не доступна!";

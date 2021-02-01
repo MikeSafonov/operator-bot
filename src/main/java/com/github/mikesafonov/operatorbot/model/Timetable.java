@@ -22,7 +22,7 @@ public class Timetable {
 	private Integer id;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private InternalUser userId;
+	private User userId;
 	@Column(name = "times")
 	private LocalDate time;
 }

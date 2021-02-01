@@ -1,9 +1,9 @@
 package com.github.mikesafonov.operatorbot;
 
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
 import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class MessageNotifierTest {
     private MessageNotifier messageNotifier;
 
     private Timetable timetable = new Timetable();
-    private InternalUser duty = new InternalUser();
+    private User duty = new User();
     private SendMessage sendMessage = new SendMessage();
     private long id;
     private String message;

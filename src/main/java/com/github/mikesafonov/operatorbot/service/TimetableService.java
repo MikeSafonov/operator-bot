@@ -2,8 +2,8 @@ package com.github.mikesafonov.operatorbot.service;
 
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
@@ -14,9 +14,9 @@ public interface TimetableService {
 
 	Optional<Timetable> findByDate(LocalDate date);
 
-	Page<Timetable> findUsersDutyInFuture(InternalUser user, int amount);
+	Page<Timetable> findUsersDutyInFuture(User user, int amount);
 
-	void updateUserDate(LocalDate date, InternalUser user);
+	void updateUserDate(LocalDate date, User user);
 
-	Timetable addNote(Integer userId, LocalDate date) throws UserNotFoundException;
+	Timetable addNote(User user, LocalDate date) throws UserNotFoundException;
 }

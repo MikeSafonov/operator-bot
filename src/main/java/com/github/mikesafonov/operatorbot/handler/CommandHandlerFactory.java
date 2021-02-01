@@ -6,8 +6,8 @@ import com.github.mikesafonov.operatorbot.handler.admin.AddHandler;
 import com.github.mikesafonov.operatorbot.handler.admin.UpdateDutyHandler;
 import com.github.mikesafonov.operatorbot.handler.internal.WhenMeHandler;
 import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommandHandlerFactory {
     private final TimetableService timetableService;
-    private final InternalUserService internalUserService;
+    private final UserService userService;
     private final Parser parser;
 
     public CommandHandler createNewHandler(Command command) {
@@ -28,12 +28,13 @@ public class CommandHandlerFactory {
                 return new RoleHandler();
             case WHO:
                 return new WhoHandler(timetableService);
-            case ADD:
-                return new AddHandler(internalUserService, parser);
+            case ADD_DUTY:
+            case ADD_USER:
+                return new AddHandler(userService, parser);
             case WHEN_MY_DUTY:
-                return new WhenMeHandler(timetableService, internalUserService, parser);
+                return new WhenMeHandler(timetableService, userService, parser);
             case UPDATE_DUTY:
-                return new UpdateDutyHandler(timetableService, internalUserService, parser);
+                return new UpdateDutyHandler(timetableService, userService, parser);
             default:
                 return new DefaultHandler();
         }

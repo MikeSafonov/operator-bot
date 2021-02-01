@@ -24,36 +24,36 @@ public class RoleHandlerTest {
 
     @Test
     public void shouldReturnRoleMessageWithAdmin() {
-        AuthorizationTelegram user = new AuthorizationTelegramAdmin();
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
 
-        SendMessage actual = roleHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(adminText);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnRoleMessageWithInternalUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramInternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramInternal();
 
-        SendMessage actual = roleHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(internalUserText);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnRoleMessageWithExternalUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramExternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramExternal();
 
-        SendMessage actual = roleHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(externalUserText);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnRoleMessageWithUnknownUser() {
-        AuthorizationTelegram user = new AuthorizationTelegramUnknown();
+        AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
-        SendMessage actual = roleHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(unknownUserText);
         Assertions.assertEquals(expected, actual);
     }

@@ -4,8 +4,8 @@ import com.github.mikesafonov.operatorbot.exceptions.ConfigTableNotFoundExceptio
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.model.AdditionalDayOff;
 import com.github.mikesafonov.operatorbot.model.AdditionalWorkday;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public class DefinitionServiceImpl implements DefinitionService {
 
     private final TimetableService timetableService;
-    private final InternalUserService internalUserService;
+    private final UserService userService;
     private final AdditionalDayOffService additionalDayOffService;
     private final AdditionalWorkdayService additionalWorkdayService;
     private final ConfigTableService configService;
@@ -65,9 +65,9 @@ public class DefinitionServiceImpl implements DefinitionService {
         return true;
     }
 
-    private void assignUser(InternalUser user, LocalDate date) {
+    private void assignUser(User user, LocalDate date) {
         try {
-            timetableService.addNote(user.getId(), date);
+            timetableService.addNote(user, date);
             log.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -75,9 +75,9 @@ public class DefinitionServiceImpl implements DefinitionService {
         }
     }
 
-    private InternalUser getUserForDuty() throws UserNotFoundException {
-        return internalUserService.findUserByUserStatusAndLastDutyDate()
-                .or(() -> internalUserService.findFirstOrderByFullName())
+    private User getUserForDuty() throws UserNotFoundException {
+        return userService.findUserByUserStatusAndLastDutyDate()
+                .or(() -> userService.findFirstDutyOrderByFullName())
                 .orElseThrow(()-> new UserNotFoundException("No users! No one to appoint for duty!"));
     }
 }

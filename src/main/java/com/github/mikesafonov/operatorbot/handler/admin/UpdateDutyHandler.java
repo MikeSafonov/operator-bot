@@ -3,12 +3,13 @@ package com.github.mikesafonov.operatorbot.handler.admin;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.CommandFormatException;
+import com.github.mikesafonov.operatorbot.exceptions.UserFormatException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.handler.CommandHandler;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,7 +21,7 @@ import java.time.format.DateTimeParseException;
 @RequiredArgsConstructor
 public class UpdateDutyHandler implements CommandHandler {
     private final TimetableService timetableService;
-    private final InternalUserService internalUserService;
+    private final UserService userService;
     private final Parser parser;
 
     @Override
@@ -40,6 +41,9 @@ public class UpdateDutyHandler implements CommandHandler {
             } catch (CommandFormatException e) {
                 log.error("Incorrect command format", e);
                 text.append("Команда введена неверно!");
+            } catch (UserFormatException e) {
+                log.error("User can not be duty!");
+                text.append("Этот пользователь не может быть дежурным!");
             }
         } else {
             text.append("Команда не доступна!");
@@ -61,13 +65,13 @@ public class UpdateDutyHandler implements CommandHandler {
         }
     }
 
-    private void addDuty(LocalDate date, long telegramId) {
-        InternalUser user = internalUserService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
-        timetableService.addNote(user.getId(), date);
+    private void addDuty(LocalDate date, long telegramId) throws UserFormatException {
+        User user = userService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        timetableService.addNote(user, date);
     }
 
-    private void updateDuty(LocalDate date, long telegramId) {
-        InternalUser user = internalUserService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
+    private void updateDuty(LocalDate date, long telegramId) throws UserFormatException {
+        User user = userService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         timetableService.updateUserDate(date, user);
     }
 

@@ -1,12 +1,14 @@
 package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
+import com.github.mikesafonov.operatorbot.exceptions.UserFormatException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
+import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.Timetable;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.repository.TimetableRepository;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +24,7 @@ import java.util.Optional;
 public class TimetableServiceImpl implements TimetableService {
 
 	private final TimetableRepository timetableRepository;
-	private final InternalUserService internalUserService;
+	private final UserService userService;
 
 	@Override
 	public Timetable findByTodayDate() throws TodayUserNotFoundException {
@@ -36,21 +38,29 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public Page<Timetable> findUsersDutyInFuture(InternalUser user, int amount) {
+	public Page<Timetable> findUsersDutyInFuture(User user, int amount) {
 		return timetableRepository.findUsersDutyInFuture(user, PageRequest.of(0, amount));
 	}
 
 	@Override
-	public void updateUserDate(LocalDate date, InternalUser user) {
-		timetableRepository.updateUserDate(date, user);
+	public void updateUserDate(LocalDate date, User user) {
+		if(user.getRole().equals(Role.DUTY)) {
+			timetableRepository.updateUserDate(date, user);
+		} else
+		{
+			throw new UserFormatException("User can not be duty!");
+		}
 	}
 
 	@Override
-	public Timetable addNote(Integer userId, LocalDate date) throws UserNotFoundException {
+	public Timetable addNote(User user, LocalDate date) throws UserNotFoundException {
 		Timetable newNote = new Timetable();
-		InternalUser user = internalUserService.findById(userId);
-		newNote.setUserId(user);
-		newNote.setTime(date);
-		return timetableRepository.save(newNote);
+		if(user.getRole().equals(Role.DUTY)) {
+			newNote.setUserId(user);
+			newNote.setTime(date);
+			return timetableRepository.save(newNote);
+		} else {
+			throw new UserFormatException("User can not be duty!");
+		}
 	}
 }

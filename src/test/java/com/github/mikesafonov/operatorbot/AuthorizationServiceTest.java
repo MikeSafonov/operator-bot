@@ -1,11 +1,10 @@
 package com.github.mikesafonov.operatorbot;
 
-import com.github.mikesafonov.operatorbot.model.ExternalUser;
-import com.github.mikesafonov.operatorbot.model.InternalUser;
+import com.github.mikesafonov.operatorbot.model.Role;
+import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationService;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.ExternalUserService;
-import com.github.mikesafonov.operatorbot.service.InternalUserService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,9 +19,7 @@ import java.util.Set;
 
 public class AuthorizationServiceTest {
 	@Mock
-	private InternalUserService internalService;
-	@Mock
-	private ExternalUserService externalService;
+	private UserService userService;
 
 	private AuthorizationService service;
 
@@ -33,7 +30,7 @@ public class AuthorizationServiceTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		adminList.add(adminId);
-		service = new AuthorizationServiceImpl(internalService, externalService, adminList);
+		service = new AuthorizationServiceImpl(userService, adminList);
 	}
 
 	@Test
@@ -46,14 +43,16 @@ public class AuthorizationServiceTest {
 		Assertions.assertFalse(auth.isExternal());
 		Assertions.assertFalse(auth.isInternal());
 		Assertions.assertFalse(auth.isAdmin());
-		Mockito.verify(internalService, Mockito.times(1)).findByTelegramId(telegramId);
+		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 	}
 
 	@Test
 	public void shouldReturnInternalAuthorization() {
 		long telegramId = 111111;
+		User user = new User();
+		user.setRole(Role.DUTY);
 
-		Mockito.when(internalService.findByTelegramId(telegramId)).thenReturn(Optional.of(new InternalUser()));
+		Mockito.when(userService.findByTelegramId(telegramId)).thenReturn(Optional.of(user));
 		AuthorizationTelegram auth = service.getInfo(telegramId);
 
 		Assertions.assertNotNull(auth);
@@ -61,14 +60,16 @@ public class AuthorizationServiceTest {
 		Assertions.assertFalse(auth.isExternal());
 		Assertions.assertTrue(auth.isInternal());
 		Assertions.assertFalse(auth.isAdmin());
-		Mockito.verify(internalService, Mockito.times(1)).findByTelegramId(telegramId);
+		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 	}
 
 	@Test
 	public void shouldReturnExternalAuthorization() {
 		long telegramId = 111111;
+		User user = new User();
+		user.setRole(Role.USER);
 
-		Mockito.when(externalService.findByTelegramId(telegramId)).thenReturn(Optional.of(new ExternalUser()));
+		Mockito.when(userService.findByTelegramId(telegramId)).thenReturn(Optional.of(user));
 		AuthorizationTelegram auth = service.getInfo(telegramId);
 
 		Assertions.assertNotNull(auth);
@@ -76,14 +77,14 @@ public class AuthorizationServiceTest {
 		Assertions.assertTrue(auth.isExternal());
 		Assertions.assertFalse(auth.isInternal());
 		Assertions.assertFalse(auth.isAdmin());
-		Mockito.verify(externalService, Mockito.times(1)).findByTelegramId(telegramId);
+		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 	}
 
 	@Test
 	public void shouldReturnAdminAuthorization() {
 		long telegramId = 000000;
 
-		Mockito.when(internalService.findByTelegramId(telegramId)).thenReturn(Optional.of(new InternalUser()));
+		Mockito.when(userService.findByTelegramId(telegramId)).thenReturn(Optional.of(new User()));
 		AuthorizationTelegram auth = service.getInfo(telegramId);
 
 		Assertions.assertNotNull(auth);
@@ -91,7 +92,7 @@ public class AuthorizationServiceTest {
 		Assertions.assertFalse(auth.isExternal());
 		Assertions.assertTrue(auth.isInternal());
 		Assertions.assertTrue(auth.isAdmin());
-		Mockito.verify(externalService, Mockito.times(1)).findByTelegramId(telegramId);
+		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 
 	}
 
