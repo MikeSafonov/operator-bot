@@ -48,7 +48,7 @@ public class AddHandler implements MessageHandler {
         return sendMessage;
     }
 
-    private void addUser(String message) throws UserAlreadyExistException {
+    private void addUser(String message) {
         Long id = getIdFromMessage(message);
         String fullName = getFullNameFromMessage(message);
         if (id != null && fullName != null) {
@@ -58,7 +58,7 @@ public class AddHandler implements MessageHandler {
         }
     }
 
-    private void addDutyUser(String message) throws UserAlreadyExistException {
+    private void addDutyUser(String message) {
         Long id = getIdFromMessage(message);
         String fullName = getFullNameFromMessage(message);
         if (id != null && fullName != null) {

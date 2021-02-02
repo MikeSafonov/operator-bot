@@ -65,12 +65,12 @@ public class UpdateDutyHandler implements MessageHandler {
         }
     }
 
-    private void addDuty(LocalDate date, long telegramId) throws UserFormatException {
+    private void addDuty(LocalDate date, long telegramId) {
         User user = userService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         timetableService.addNote(user, date);
     }
 
-    private void updateDuty(LocalDate date, long telegramId) throws UserFormatException {
+    private void updateDuty(LocalDate date, long telegramId) {
         User user = userService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         timetableService.updateUserDate(date, user);
     }

@@ -74,7 +74,7 @@ public class DefinitionServiceImpl implements DefinitionService {
         }
     }
 
-    private User getUserForDuty() throws UserNotFoundException {
+    private User getUserForDuty() {
         return userService.findUserByUserStatusAndLastDutyDate()
                 .or(() -> userService.findFirstDutyOrderByFullName())
                 .orElseThrow(()-> new UserNotFoundException("No users! No one to appoint for duty!"));

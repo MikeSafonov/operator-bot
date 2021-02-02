@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	@Override
-	public User addUserDuty(long telegramId, String fullName) throws UserAlreadyExistException {
+	public User addUserDuty(long telegramId, String fullName) {
 		if(userRepository.findByTelegramId(telegramId).isPresent()){
 			throw new UserAlreadyExistException("");
 		} else {
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User addUser(long telegramId, String fullName) throws UserAlreadyExistException {
+	public User addUser(long telegramId, String fullName) {
 		if(userRepository.findByTelegramId(telegramId).isPresent()){
 			throw new UserAlreadyExistException("");
 		} else {
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findById(Integer id) throws UserNotFoundException {
+	public User findById(Integer id) {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new UserNotFoundException("User doesn't exist!"));
 	}

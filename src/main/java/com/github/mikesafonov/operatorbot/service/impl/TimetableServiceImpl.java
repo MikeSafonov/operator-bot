@@ -53,7 +53,7 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public Timetable addNote(User user, LocalDate date) throws UserNotFoundException {
+	public Timetable addNote(User user, LocalDate date) {
 		Timetable newNote = new Timetable();
 		if(user.getRole().equals(Role.DUTY)) {
 			newNote.setUserId(user);
