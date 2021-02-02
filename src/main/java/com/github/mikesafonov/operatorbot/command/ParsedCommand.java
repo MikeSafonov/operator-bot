@@ -10,17 +10,4 @@ import lombok.NoArgsConstructor;
 public class ParsedCommand {
     private Command command = Command.NONE;
     private String text = "";
-
-    public boolean equals(Object anObject) {
-        if(this == anObject) {
-            return true;
-        }
-        if(anObject instanceof ParsedCommand) {
-            ParsedCommand anotherParsedCommand = (ParsedCommand) anObject;
-            String anotherText = anotherParsedCommand.getText();
-            Command anotherCommand = anotherParsedCommand.getCommand();
-            return anotherText.equals(text) && anotherCommand == command;
-        }
-        return false;
-    }
 }
