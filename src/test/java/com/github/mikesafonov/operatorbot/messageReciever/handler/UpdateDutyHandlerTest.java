@@ -3,7 +3,7 @@ package com.github.mikesafonov.operatorbot.messageReciever.handler;
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
-import com.github.mikesafonov.operatorbot.handler.admin.UpdateDutyHandler;
+import com.github.mikesafonov.operatorbot.handler.command.admin.UpdateDutyHandler;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;

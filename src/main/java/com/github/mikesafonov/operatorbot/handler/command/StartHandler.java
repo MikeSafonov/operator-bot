@@ -1,10 +1,11 @@
-package com.github.mikesafonov.operatorbot.handler;
+package com.github.mikesafonov.operatorbot.handler.command;
 
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
+import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-public class StartHandler implements CommandHandler {
+public class StartHandler implements MessageHandler {
     private final String END_LINE = "\n";
 
     @Override

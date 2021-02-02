@@ -1,8 +1,8 @@
-package com.github.mikesafonov.operatorbot.handler.internal;
+package com.github.mikesafonov.operatorbot.handler.command.internal;
 
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
-import com.github.mikesafonov.operatorbot.handler.CommandHandler;
+import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Slf4j
-public class WhoHandler implements CommandHandler {
+public class WhoHandler implements MessageHandler {
     private final TimetableService timetableService;
 
     public WhoHandler(TimetableService timetableService) {

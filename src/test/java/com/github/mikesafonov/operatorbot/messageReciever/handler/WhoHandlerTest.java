@@ -3,7 +3,7 @@ package com.github.mikesafonov.operatorbot.messageReciever.handler;
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
-import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
+import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;

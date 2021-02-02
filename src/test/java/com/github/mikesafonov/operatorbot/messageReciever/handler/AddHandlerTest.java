@@ -4,7 +4,7 @@ import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.UserAlreadyExistException;
-import com.github.mikesafonov.operatorbot.handler.admin.AddHandler;
+import com.github.mikesafonov.operatorbot.handler.command.admin.AddHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.UserService;
 import org.junit.jupiter.api.Assertions;

@@ -1,10 +1,10 @@
-package com.github.mikesafonov.operatorbot.handler.internal;
+package com.github.mikesafonov.operatorbot.handler.command.internal;
 
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.ParserException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.handler.CommandHandler;
+import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class WhenMeHandler implements CommandHandler {
+public class WhenMeHandler implements MessageHandler {
     private final TimetableService timetableService;
     private final UserService userService;
     private final Parser parser;
