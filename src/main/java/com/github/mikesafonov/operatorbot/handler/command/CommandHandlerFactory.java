@@ -1,11 +1,12 @@
-package com.github.mikesafonov.operatorbot.handler;
+package com.github.mikesafonov.operatorbot.handler.command;
 
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.Parser;
-import com.github.mikesafonov.operatorbot.handler.admin.AddHandler;
-import com.github.mikesafonov.operatorbot.handler.admin.UpdateDutyHandler;
-import com.github.mikesafonov.operatorbot.handler.internal.WhenMeHandler;
-import com.github.mikesafonov.operatorbot.handler.internal.WhoHandler;
+import com.github.mikesafonov.operatorbot.handler.*;
+import com.github.mikesafonov.operatorbot.handler.command.admin.AddHandler;
+import com.github.mikesafonov.operatorbot.handler.command.admin.UpdateDutyHandler;
+import com.github.mikesafonov.operatorbot.handler.command.internal.WhenMeHandler;
+import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class CommandHandlerFactory {
     private final UserService userService;
     private final Parser parser;
 
-    public CommandHandler createNewHandler(Command command) {
+    public MessageHandler createNewHandler(Command command) {
         switch (command) {
             case START:
                 return new StartHandler();

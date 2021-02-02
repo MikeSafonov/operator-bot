@@ -4,6 +4,7 @@ import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.*;
+import com.github.mikesafonov.operatorbot.handler.command.CommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,13 +29,13 @@ public class MessageReciever {
         AuthorizationTelegram user = userAuthorization.getInfo(chatId);
 
         ParsedCommand parsedCommand = parser.getParsedCommand(message);
-        CommandHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
+        MessageHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
 
         SendMessage operationResult = handlerForCommand.operate(chatId, user, parsedCommand);
         return operationResult;
     }
 
-    private CommandHandler getHandlerForCommand(Command command) {
+    private MessageHandler getHandlerForCommand(Command command) {
         return commandHandlerFactory.createNewHandler(command);
     }
 }

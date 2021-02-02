@@ -70,7 +70,6 @@ public class DefinitionServiceImpl implements DefinitionService {
             timetableService.addNote(user, date);
             log.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
         } catch (UserNotFoundException e) {
-            e.printStackTrace();
             log.error("Expected user for assigning not found!", e);
         }
     }

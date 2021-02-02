@@ -2,7 +2,7 @@ package com.github.mikesafonov.operatorbot.messageReciever.handler;
 
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
-import com.github.mikesafonov.operatorbot.handler.RoleHandler;
+import com.github.mikesafonov.operatorbot.handler.command.RoleHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;

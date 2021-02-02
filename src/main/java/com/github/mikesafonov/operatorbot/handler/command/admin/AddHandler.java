@@ -1,11 +1,11 @@
-package com.github.mikesafonov.operatorbot.handler.admin;
+package com.github.mikesafonov.operatorbot.handler.command.admin;
 
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.CommandFormatException;
 import com.github.mikesafonov.operatorbot.exceptions.UserAlreadyExistException;
-import com.github.mikesafonov.operatorbot.handler.CommandHandler;
+import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @RequiredArgsConstructor
 @Slf4j
-public class AddHandler implements CommandHandler {
+public class AddHandler implements MessageHandler {
     private final UserService userService;
     private final Parser parser;
 

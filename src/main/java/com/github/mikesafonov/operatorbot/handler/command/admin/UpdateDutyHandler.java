@@ -1,11 +1,11 @@
-package com.github.mikesafonov.operatorbot.handler.admin;
+package com.github.mikesafonov.operatorbot.handler.command.admin;
 
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.CommandFormatException;
 import com.github.mikesafonov.operatorbot.exceptions.UserFormatException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.handler.CommandHandler;
+import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
@@ -19,7 +19,7 @@ import java.time.format.DateTimeParseException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class UpdateDutyHandler implements CommandHandler {
+public class UpdateDutyHandler implements MessageHandler {
     private final TimetableService timetableService;
     private final UserService userService;
     private final Parser parser;
