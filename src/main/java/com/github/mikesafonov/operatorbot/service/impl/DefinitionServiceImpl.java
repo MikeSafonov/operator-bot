@@ -2,9 +2,7 @@ package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.exceptions.ConfigTableNotFoundException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.AdditionalDayOff;
 import com.github.mikesafonov.operatorbot.model.AdditionalWorkday;
-import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.*;
 import lombok.RequiredArgsConstructor;
@@ -42,23 +40,27 @@ public class DefinitionServiceImpl implements DefinitionService {
         }
         for (int i = 0; i <= additionalDaysForAssign; i++) {
             LocalDate date = LocalDate.now(clock).plusDays(i);
-            Optional<AdditionalDayOff> dayOff = additionalDayOffService.findByDay(date);
-            dayOff.ifPresentOrElse((value) -> log.debug(date.toString() + " is day off!"), () -> {
-                if (isWorkday(date)) {
-                    Optional<Timetable> timetable = timetableService.findByDate(date);
-                    timetable.ifPresentOrElse(
-                            (value) -> log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString()),
-                            () -> assignUser(getUserForDuty(), date));
-                } else {
-                    log.debug(date.toString() + " is weekend!");
-                }
-            });
+            additionalDayOffService.findByDay(date)
+                    .ifPresentOrElse(
+                            value -> log.debug(date.toString() + " is day off!"),
+                            () -> assignUser(date)
+                    );
         }
     }
 
-    public boolean isWorkday(LocalDate date) {
+    private void assignUser(LocalDate date) {
+        if (isWorkday(date)) {
+            timetableService.findByDate(date).ifPresentOrElse(
+                    value -> log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString()),
+                    () -> assignUser(getUserForDuty(), date));
+        } else {
+            log.debug(date.toString() + " is weekend!");
+        }
+    }
+
+    private boolean isWorkday(LocalDate date) {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
-        if(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY ) {
+        if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
             Optional<AdditionalWorkday> workday = additionalWorkdayService.findByDay(date);
             return workday.isPresent();
         }
@@ -76,7 +78,7 @@ public class DefinitionServiceImpl implements DefinitionService {
 
     private User getUserForDuty() {
         return userService.findUserByUserStatusAndLastDutyDate()
-                .or(() -> userService.findFirstDutyOrderByFullName())
-                .orElseThrow(()-> new UserNotFoundException("No users! No one to appoint for duty!"));
+                .or(userService::findFirstDutyOrderByFullName)
+                .orElseThrow(() -> new UserNotFoundException("No users! No one to appoint for duty!"));
     }
 }

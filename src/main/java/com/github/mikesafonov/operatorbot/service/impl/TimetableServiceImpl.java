@@ -2,7 +2,6 @@ package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
 import com.github.mikesafonov.operatorbot.exceptions.UserFormatException;
-import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
 import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.Timetable;
 import com.github.mikesafonov.operatorbot.model.User;
@@ -23,44 +22,43 @@ import java.util.Optional;
 @Transactional
 public class TimetableServiceImpl implements TimetableService {
 
-	private final TimetableRepository timetableRepository;
-	private final UserService userService;
+    private final TimetableRepository timetableRepository;
+    private final UserService userService;
 
-	@Override
-	public Timetable findByTodayDate() throws TodayUserNotFoundException {
-		return timetableRepository.findByTime((LocalDate.now()))
-				.orElseThrow(() -> new TodayUserNotFoundException("User not found!"));
-	}
+    @Override
+    public Timetable findByTodayDate() throws TodayUserNotFoundException {
+        return timetableRepository.findByTime((LocalDate.now()))
+                .orElseThrow(() -> new TodayUserNotFoundException("User not found!"));
+    }
 
-	@Override
-	public Optional<Timetable> findByDate(LocalDate date) {
-		return timetableRepository.findByTime(date);
-	}
+    @Override
+    public Optional<Timetable> findByDate(LocalDate date) {
+        return timetableRepository.findByTime(date);
+    }
 
-	@Override
-	public Page<Timetable> findUsersDutyInFuture(User user, int amount) {
-		return timetableRepository.findUsersDutyInFuture(user, PageRequest.of(0, amount));
-	}
+    @Override
+    public Page<Timetable> findUsersDutyInFuture(User user, int amount) {
+        return timetableRepository.findUsersDutyInFuture(user, PageRequest.of(0, amount));
+    }
 
-	@Override
-	public void updateUserDate(LocalDate date, User user) {
-		if(user.getRole().equals(Role.DUTY)) {
-			timetableRepository.updateUserDate(date, user);
-		} else
-		{
-			throw new UserFormatException("User can not be duty!");
-		}
-	}
+    @Override
+    public void updateUserDate(LocalDate date, User user) {
+        if (user.getRole().equals(Role.DUTY)) {
+            timetableRepository.updateUserDate(date, user);
+        } else {
+            throw new UserFormatException("User can not be duty!");
+        }
+    }
 
-	@Override
-	public Timetable addNote(User user, LocalDate date) {
-		Timetable newNote = new Timetable();
-		if(user.getRole().equals(Role.DUTY)) {
-			newNote.setUserId(user);
-			newNote.setTime(date);
-			return timetableRepository.save(newNote);
-		} else {
-			throw new UserFormatException("User can not be duty!");
-		}
-	}
+    @Override
+    public Timetable addNote(User user, LocalDate date) {
+        Timetable newNote = new Timetable();
+        if (user.getRole().equals(Role.DUTY)) {
+            newNote.setUserId(user);
+            newNote.setTime(date);
+            return timetableRepository.save(newNote);
+        } else {
+            throw new UserFormatException("User can not be duty!");
+        }
+    }
 }

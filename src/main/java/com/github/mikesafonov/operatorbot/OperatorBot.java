@@ -43,15 +43,7 @@ public class OperatorBot extends TelegramLongPollingBot {
 		return botToken;
 	}
 
-	public void sendMessage(long chatId, String text) {
-		try {
-			execute(new SendMessage(chatId, text));
-		} catch (TelegramApiException ex) {
-			log.debug("Message didn't send. " + ex);
-		}
-	}
-
-	public void sendMessage(SendMessage sendMessage) {
+	private void sendMessage(SendMessage sendMessage) {
 		try {
 			execute(sendMessage);
 		} catch (TelegramApiException ex) {

@@ -11,9 +11,9 @@ public interface UserService {
 
 	List<User> findAll();
 
-	User addUserDuty(long telegramId, String full_name);
+	User addUserDuty(long telegramId, String fullName);
 
-	User addUser(long telegramId, String full_name);
+	User addUser(long telegramId, String fullName);
 
 	void changeUserRole(long telegramId, Role role);
 

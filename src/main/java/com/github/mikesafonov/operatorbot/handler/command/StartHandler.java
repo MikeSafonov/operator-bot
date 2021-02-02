@@ -6,7 +6,7 @@ import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class StartHandler implements MessageHandler {
-    private final String END_LINE = "\n";
+    private static final String END_LINE = "\n";
 
     @Override
     public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {

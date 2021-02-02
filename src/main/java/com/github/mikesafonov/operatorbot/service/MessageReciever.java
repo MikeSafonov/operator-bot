@@ -31,8 +31,7 @@ public class MessageReciever {
         ParsedCommand parsedCommand = parser.getParsedCommand(message);
         MessageHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
 
-        SendMessage operationResult = handlerForCommand.operate(chatId, user, parsedCommand);
-        return operationResult;
+        return handlerForCommand.operate(chatId, user, parsedCommand);
     }
 
     private MessageHandler getHandlerForCommand(Command command) {
