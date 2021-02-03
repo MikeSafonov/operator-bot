@@ -24,14 +24,19 @@ public class MessageReciever {
     }
 
     public SendMessage analyze(Update update) {
-        Long chatId = update.getMessage().getChatId();
-        String message = update.getMessage().getText();
-        AuthorizationTelegram user = userAuthorization.getInfo(chatId);
+        try {
+            Long chatId = update.getMessage().getChatId();
+            String message = update.getMessage().getText();
+            AuthorizationTelegram user = userAuthorization.getInfo(chatId);
 
-        ParsedCommand parsedCommand = parser.getParsedCommand(message);
-        MessageHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
+            ParsedCommand parsedCommand = parser.getParsedCommand(message);
+            MessageHandler handlerForCommand = getHandlerForCommand(parsedCommand.getCommand());
 
-        return handlerForCommand.operate(chatId, user, parsedCommand);
+            return handlerForCommand.operate(chatId, user, parsedCommand);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new SendMessage(update.getMessage().getChatId(),  "Произошла ошибка. Обратитесь к администратору");
+        }
     }
 
     private MessageHandler getHandlerForCommand(Command command) {
