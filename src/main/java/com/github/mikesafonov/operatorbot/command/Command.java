@@ -7,5 +7,7 @@ public enum Command {
 
     WHO, WHEN_MY_DUTY, UPDATE_DUTY,
 
-    ADD_USER, ADD_DUTY
+    ADD_USER, ADD_DUTY,
+
+    REASSIGN_DUTY
 }

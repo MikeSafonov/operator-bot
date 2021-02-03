@@ -5,7 +5,9 @@ import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.*;
 import com.github.mikesafonov.operatorbot.handler.command.admin.AddHandler;
 import com.github.mikesafonov.operatorbot.handler.command.*;
+import com.github.mikesafonov.operatorbot.handler.command.admin.ReassignUsersHandler;
 import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
+import com.github.mikesafonov.operatorbot.service.DefinitionService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
 import com.github.mikesafonov.operatorbot.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -20,12 +22,14 @@ public class MessageHandlerFactoryTest {
     private UserService userService;
     @Mock
     private Parser parser;
+    @Mock
+    private DefinitionService definitionService;
 
     private CommandHandlerFactory commandHandlerFactory;
 
     @BeforeEach
     public void setUp() {
-        commandHandlerFactory = new CommandHandlerFactory(timetableService, userService, parser);
+        commandHandlerFactory = new CommandHandlerFactory(timetableService, userService, parser, definitionService);
     }
 
     @Test
@@ -62,5 +66,11 @@ public class MessageHandlerFactoryTest {
     public void shouldReturnAdminHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.ADD_USER);
         Assertions.assertEquals(AddHandler.class, actual.getClass());
+    }
+
+    @Test
+    public void shouldReturnReassignUsersHandler() {
+        MessageHandler actual = commandHandlerFactory.createNewHandler(Command.REASSIGN_DUTY);
+        Assertions.assertEquals(ReassignUsersHandler.class, actual.getClass());
     }
 }
