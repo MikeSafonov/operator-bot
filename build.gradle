@@ -35,10 +35,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
 
 	implementation 'com.github.xabgesagtx:telegram-spring-boot-starter:0.22'
 	implementation 'org.mockito:mockito-core'
+
+	implementation("io.micrometer:micrometer-core")
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
