@@ -59,7 +59,7 @@ public class WhenMeHandler implements MessageHandler {
         try {
             return Integer.parseInt(parser.getParamValue(message, 0, 1));
         } catch (ParserException e) {
-            return null;
+            return Integer.MAX_VALUE;
         }
     }
 }
