@@ -70,8 +70,7 @@ public class AddHandler implements MessageHandler {
 
     private Long getIdFromMessage(String message) {
         try {
-            Long id = Long.parseLong(parser.getParamValue(message, 0, 2));
-                return id;
+            return Long.parseLong(parser.getParamValue(message, 0, 2));
         } catch (NumberFormatException e) {
             return null;
         }
