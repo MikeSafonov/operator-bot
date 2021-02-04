@@ -23,7 +23,7 @@ public interface UserService {
 
     Optional<User> findUserByUserStatusAndLastDutyDate();
 
-    Optional<User> findFirstOrderByFullName();
+    Optional<User> findDutyByRoleByStatusOrderByFullNameAsc();
 
     User findById(Integer id);
 

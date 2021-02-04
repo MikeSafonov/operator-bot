@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findFirstOrderByFullName() {
-        return userRepository.findFirstByRoleOrderByFullNameAsc(Role.DUTY);
+    public Optional<User> findDutyByRoleByStatusOrderByFullNameAsc() {
+        return userRepository.findDutyByRoleByStatusOrderByFullNameAsc();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserChatStatus(long telegramId, ChatStatus chatStatus) {
-       userRepository.updateUserChatStatus(telegramId, chatStatus);
+        userRepository.updateUserChatStatus(telegramId, chatStatus);
     }
 
     @Override

@@ -14,7 +14,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM users WHERE id IN (SELECT mu.user_id FROM (SELECT um.user_id, MIN(um.maxDate) FROM (SELECT user_id, max(times) AS maxDate "
+    @Query(nativeQuery = true, value = "SELECT * FROM users " +
+            "WHERE id IN (SELECT mu.user_id FROM (SELECT um.user_id, MIN(um.maxDate)" +
+            " FROM (SELECT user_id, max(times) AS maxDate "
             + "FROM timetable INNER JOIN users iu on iu.id = timetable.user_id "
             + "WHERE iu.status = 0 AND iu.role = 1 "
             + "GROUP BY user_id) as um "
@@ -23,17 +25,21 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             + "LIMIT 1) as mu)")
     Optional<User> findUserByUserStatusAndLastDutyDate();
 
-    Optional<User> findFirstByRoleOrderByFullNameAsc(Role role);
+    @Query(nativeQuery = true, value = "SELECT u.* FROM users u " +
+            "NATURAL LEFT JOIN (SELECT user_id AS id FROM timetable) t " +
+            "WHERE t.id IS NULL AND u.role = 1 AND u.status = 0 ORDER BY u.full_name ASC LIMIT 1")
+    Optional<User> findDutyByRoleByStatusOrderByFullNameAsc();
 
     Optional<User> findByTelegramId(long telegramId);
 
     @Modifying
     @Query("UPDATE User u SET u.chatStatus = :chatStatus WHERE u.telegramId = :telegramId")
-    void updateUserChatStatus(@Param(value = "telegramId") long telegramId, @Param(value = "chatStatus") ChatStatus chatStatus);
+    void updateUserChatStatus(
+            @Param("telegramId") long telegramId, @Param("chatStatus") ChatStatus chatStatus);
 
     @Modifying
     @Query("UPDATE User u SET u.role = :role WHERE u.telegramId = :telegramId")
-    void changeUserRole(@Param(value = "telegramId") long telegramId, @Param(value = "role") Role role);
+    void changeUserRole(@Param("telegramId") long telegramId, @Param("role") Role role);
 
     List<User> findByRoleAndStatusOrderByFullNameAsc(Role role, Status status);
 }
