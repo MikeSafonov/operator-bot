@@ -25,6 +25,12 @@ public class TimetableHandler implements MessageHandler {
         if (user.isAdmin()) {
             int count = getCountFromMessage(parsedCommand.getText());
             var timetable = timetableService.findTimetableInFuture(count);
+            if (timetable.isEmpty()) {
+                return SendMessage.builder()
+                        .chatId(Long.toString(chatId))
+                        .text("Нет назначенных дежурств")
+                        .build();
+            }
             var message = timetable.getContent().stream()
                     .map(t -> t.getTime().toString() + " - " + t.getUserId().getFullName())
                     .collect(Collectors.joining("\n"));
