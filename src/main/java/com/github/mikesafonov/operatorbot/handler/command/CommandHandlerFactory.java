@@ -26,8 +26,6 @@ public class CommandHandlerFactory {
         switch (command) {
             case START:
                 return new StartHandler();
-            case HELP:
-                return new HelpHandler();
             case ROLE:
                 return new RoleHandler();
             case WHO:
@@ -43,8 +41,9 @@ public class CommandHandlerFactory {
                 return new UpdateDutyHandler(timetableService, userService, parser);
             case START_CHAT:
                 return new StartChatHandler(userService);
+            case HELP:
             default:
-                return new DefaultHandler();
+                return new HelpHandler();
         }
     }
 }

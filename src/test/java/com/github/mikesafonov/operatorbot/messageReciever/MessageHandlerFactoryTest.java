@@ -35,7 +35,7 @@ public class MessageHandlerFactoryTest {
     @Test
     public void shouldReturnDefaultHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.NONE);
-        Assertions.assertEquals(DefaultHandler.class, actual.getClass());
+        Assertions.assertEquals(HelpHandler.class, actual.getClass());
     }
 
     @Test
