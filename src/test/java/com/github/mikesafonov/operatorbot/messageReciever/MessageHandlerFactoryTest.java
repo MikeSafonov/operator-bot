@@ -6,6 +6,7 @@ import com.github.mikesafonov.operatorbot.handler.*;
 import com.github.mikesafonov.operatorbot.handler.command.admin.AddHandler;
 import com.github.mikesafonov.operatorbot.handler.command.*;
 import com.github.mikesafonov.operatorbot.handler.command.admin.ReassignUsersHandler;
+import com.github.mikesafonov.operatorbot.handler.command.admin.TimetableHandler;
 import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
 import com.github.mikesafonov.operatorbot.service.DefinitionService;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
@@ -15,7 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-public class MessageHandlerFactoryTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class MessageHandlerFactoryTest {
     @Mock
     private TimetableService timetableService;
     @Mock
@@ -28,49 +31,55 @@ public class MessageHandlerFactoryTest {
     private CommandHandlerFactory commandHandlerFactory;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         commandHandlerFactory = new CommandHandlerFactory(timetableService, userService, parser, definitionService);
     }
 
     @Test
-    public void shouldReturnDefaultHandler() {
+    void shouldReturnDefaultHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.NONE);
-        Assertions.assertEquals(HelpHandler.class, actual.getClass());
+        assertEquals(HelpHandler.class, actual.getClass());
     }
 
     @Test
-    public void shouldReturnHelpHandler() {
+    void shouldReturnHelpHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.HELP);
-        Assertions.assertEquals(HelpHandler.class, actual.getClass());
+        assertEquals(HelpHandler.class, actual.getClass());
     }
 
     @Test
-    public void shouldReturnRoleHandler() {
+    void shouldReturnRoleHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.ROLE);
-        Assertions.assertEquals(RoleHandler.class, actual.getClass());
+        assertEquals(RoleHandler.class, actual.getClass());
     }
 
     @Test
-    public void shouldReturnStartHandler() {
+    void shouldReturnStartHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.START);
-        Assertions.assertEquals(StartHandler.class, actual.getClass());
+        assertEquals(StartHandler.class, actual.getClass());
     }
 
     @Test
-    public void shouldReturnWhoHandler() {
+    void shouldReturnWhoHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.WHO);
-        Assertions.assertEquals(WhoHandler.class, actual.getClass());
+        assertEquals(WhoHandler.class, actual.getClass());
     }
 
     @Test
-    public void shouldReturnAdminHandler() {
+    void shouldReturnAdminHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.ADD_USER);
-        Assertions.assertEquals(AddHandler.class, actual.getClass());
+        assertEquals(AddHandler.class, actual.getClass());
     }
 
     @Test
-    public void shouldReturnReassignUsersHandler() {
+    void shouldReturnReassignUsersHandler() {
         MessageHandler actual = commandHandlerFactory.createNewHandler(Command.REASSIGN_DUTY);
-        Assertions.assertEquals(ReassignUsersHandler.class, actual.getClass());
+        assertEquals(ReassignUsersHandler.class, actual.getClass());
+    }
+
+    @Test
+    void shouldReturnTimetableHandler() {
+        MessageHandler actual = commandHandlerFactory.createNewHandler(Command.TIMETABLE);
+        assertEquals(TimetableHandler.class, actual.getClass());
     }
 }

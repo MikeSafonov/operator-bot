@@ -42,6 +42,11 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     @Override
+    public Page<Timetable> findTimetableInFuture(int amount) {
+        return timetableRepository.findDutyInFuture(PageRequest.of(0, amount));
+    }
+
+    @Override
     public void updateUserDate(LocalDate date, User user) {
         if (user.getRole().equals(Role.DUTY)) {
             timetableRepository.updateUserDate(date, user);

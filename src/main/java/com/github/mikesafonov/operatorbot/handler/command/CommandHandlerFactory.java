@@ -5,6 +5,7 @@ import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.handler.*;
 import com.github.mikesafonov.operatorbot.handler.command.admin.AddHandler;
 import com.github.mikesafonov.operatorbot.handler.command.admin.ReassignUsersHandler;
+import com.github.mikesafonov.operatorbot.handler.command.admin.TimetableHandler;
 import com.github.mikesafonov.operatorbot.handler.command.admin.UpdateDutyHandler;
 import com.github.mikesafonov.operatorbot.handler.command.internal.WhenMeHandler;
 import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
@@ -41,6 +42,8 @@ public class CommandHandlerFactory {
                 return new UpdateDutyHandler(timetableService, userService, parser);
             case START_CHAT:
                 return new StartChatHandler(userService);
+            case TIMETABLE:
+                return new TimetableHandler(timetableService, parser);
             case HELP:
             default:
                 return new HelpHandler();

@@ -14,6 +14,8 @@ public interface TimetableService {
 
 	Page<Timetable> findUsersDutyInFuture(User user, int amount);
 
+	Page<Timetable> findTimetableInFuture(int amount);
+
 	void updateUserDate(LocalDate date, User user);
 
 	Timetable addNote(User user, LocalDate date);
