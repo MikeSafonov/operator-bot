@@ -19,9 +19,9 @@ public interface TimetableRepository extends JpaRepository<Timetable, Integer> {
 	@Query("UPDATE Timetable u SET u.userId = :userId WHERE u.time = :date")
 	void updateUserDate(@Param(value = "date") LocalDate date, @Param(value = "userId") User user);
 
-	@Query("SELECT t FROM Timetable t WHERE t.time <= current_date AND t.userId = :userId")
+	@Query("SELECT t FROM Timetable t WHERE t.time >= current_date AND t.userId = :userId")
 	Page<Timetable> findUsersDutyInFuture(@Param(value="userId") User user, Pageable pageable);
 
-	@Query("SELECT t FROM Timetable t WHERE t.time <= current_date")
+	@Query("SELECT t FROM Timetable t WHERE t.time >= current_date")
 	Page<Timetable> findDutyInFuture(Pageable pageable);
 }
