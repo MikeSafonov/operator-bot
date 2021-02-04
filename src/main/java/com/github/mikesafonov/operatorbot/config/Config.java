@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.meta.ApiContext;
 
 import java.time.Clock;
 @Configuration
@@ -23,7 +22,7 @@ public class Config {
 
     @Bean
     public DefaultBotOptions setProxy() {
-        DefaultBotOptions options = ApiContext.getInstance(DefaultBotOptions.class);
+        DefaultBotOptions options = new DefaultBotOptions();
         if(host != null && port != null) {
             options.setProxyHost(host);
             options.setProxyPort(port);

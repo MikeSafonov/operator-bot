@@ -23,16 +23,21 @@ public class DutyMessageHandler implements MessageHandler {
     }
 
     private SendMessage getMessageForDuty(long chatId, AuthorizationTelegram user, String message) {
-        SendMessage operationResult;
         try {
             Timetable timetable = timetableService.findByTodayDate();
             long id = timetable.getUserId().getTelegramId();
-            operationResult = new SendMessage().setChatId(id).setText(user.getUserFullName() + "\n\n" + message);
             userService.updateUserChatStatus(chatId, ChatStatus.NONE);
+            return SendMessage.builder()
+                    .chatId(Long.toString(id))
+                    .text(user.getUserFullName() + "\n\n" + message)
+                    .build();
+
         } catch (TodayUserNotFoundException e) {
             log.error("Duty not found!", e);
-            operationResult = new SendMessage().setChatId(chatId).setText("Что-то пошло не так! Дежурный не на месте!");
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Что-то пошло не так! Дежурный не на месте!")
+                    .build();
         }
-        return operationResult;
     }
 }

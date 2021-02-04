@@ -23,24 +23,29 @@ public class WhoHandler implements MessageHandler {
     }
 
     private SendMessage getWhoMessage(long chatId, AuthorizationTelegram user) {
-        SendMessage sendMessage = new SendMessage();
-        if(user.isInternal()) {
-            sendMessage = sendTodayDuty(chatId);
+        if (user.isInternal()) {
+            return sendTodayDuty(chatId);
         } else {
-            sendMessage.setChatId(chatId).setText("Команда не доступна!");
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Команда не доступна!")
+                    .build();
         }
-        return sendMessage;
     }
 
     private SendMessage sendTodayDuty(long chatId) {
-        SendMessage sendMessage = new SendMessage();
         try {
             Timetable timetable = timetableService.findByTodayDate();
-            sendMessage.setChatId(chatId).setText("Дежурный сегодня: " + timetable.getUserId().getFullName());
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Дежурный сегодня: " + timetable.getUserId().getFullName())
+                    .build();
         } catch (TodayUserNotFoundException e) {
-            sendMessage.setChatId(chatId).setText("Что-то пошло не так! Дежурный на сегодня не назначен!");
             log.error("We have no duty users today!", e);
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Что-то пошло не так! Дежурный на сегодня не назначен!")
+                    .build();
         }
-        return sendMessage;
     }
 }

@@ -12,17 +12,17 @@ public class RoleHandler implements MessageHandler {
     }
 
     private SendMessage getMessageRole(long chatId, AuthorizationTelegram user) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
+        var builder = SendMessage.builder()
+                .chatId(Long.toString(chatId));
+
         if (user.isAdmin()) {
-            sendMessage.setText("Вы администратор.");
+            return builder.text("Вы администратор.").build();
         } else if (user.isInternal()) {
-            sendMessage.setText("Вы внутренний пользователь.");
+            return builder.text("Вы внутренний пользователь.").build();
         } else if (user.isExternal()) {
-            sendMessage.setText("Вы внешний пользователь.");
+            return builder.text("Вы внешний пользователь.").build();
         } else {
-            sendMessage.setText("Мы вас не знаем.");
+            return builder.text("Мы вас не знаем.").build();
         }
-        return sendMessage;
     }
 }

@@ -57,7 +57,7 @@ public class WhenMeHandlerTest {
         parsedCommand.setText(message);
         LocalDate date = LocalDate.now();
 
-        Timetable first= new Timetable();
+        Timetable first = new Timetable();
         first.setTime(date);
         timetableList.add(first);
         Timetable second = new Timetable();
@@ -81,12 +81,16 @@ public class WhenMeHandlerTest {
 
         StringBuilder text = new StringBuilder();
         text.append("Твои дежурства:").append("\n").append("\n");
-        for(int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             text.append(timetableList.get(i).getTime().toString()).append("\n");
         }
 
         SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(user.getTelegramId()).setText(text.toString());
+        SendMessage expected =
+                SendMessage.builder()
+                        .chatId(Long.toString(user.getTelegramId()))
+                        .text(text.toString())
+                        .build();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -105,7 +109,10 @@ public class WhenMeHandlerTest {
         String text = "Ближайшие дежурства не назначены!";
 
         SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(user.getTelegramId()).setText(text);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(user.getTelegramId()))
+                .text(text)
+                .build();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -120,7 +127,10 @@ public class WhenMeHandlerTest {
         String text = "Команда не доступна!";
 
         SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(user.getTelegramId()).setText(text);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(user.getTelegramId()))
+                .text(text)
+                .build();
 
         Assertions.assertEquals(expected, actual);
     }

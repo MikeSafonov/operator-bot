@@ -3,6 +3,7 @@ package com.github.mikesafonov.operatorbot.handler.command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class StartHandler implements MessageHandler {
@@ -14,15 +15,14 @@ public class StartHandler implements MessageHandler {
     }
 
     private SendMessage getMessageStart(long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
-
         StringBuilder text = new StringBuilder();
         text.append("Привет. Я умею назначать дежурных.").append(END_LINE);
         text.append("Для работы со мной воспользуйтесь командами.").append(END_LINE);
         text.append("[/help](/help) - Помощь.");
-        sendMessage.setText(text.toString());
-        return sendMessage;
+        return SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .parseMode(ParseMode.MARKDOWN)
+                .text(text.toString())
+                .build();
     }
 }

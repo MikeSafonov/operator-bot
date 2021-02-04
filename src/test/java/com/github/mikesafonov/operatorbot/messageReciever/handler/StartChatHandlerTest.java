@@ -3,8 +3,6 @@ package com.github.mikesafonov.operatorbot.messageReciever.handler;
 import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.handler.command.StartChatHandler;
-import com.github.mikesafonov.operatorbot.model.ChatStatus;
-import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -14,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.util.Optional;
 
 public class StartChatHandlerTest {
     @Mock
@@ -38,7 +34,10 @@ public class StartChatHandlerTest {
     public void shouldReturnStartChatMessageWhenUserKnown() {
         Mockito.when(authorization.isUnknown()).thenReturn(false);
         SendMessage actual = startChatHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Введите сообщение дежурному.");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Введите сообщение дежурному.")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -46,7 +45,10 @@ public class StartChatHandlerTest {
     public void shouldReturnStartChatMessageWhenUserUnknown() {
         Mockito.when(authorization.isUnknown()).thenReturn(true);
         SendMessage actual = startChatHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Команда не доступна!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Команда не доступна!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 }

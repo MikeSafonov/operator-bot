@@ -43,7 +43,10 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 2)).thenReturn(String.valueOf(newUserId));
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn(fullName);
         SendMessage actual = addHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Пользователь успешно добавлен!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Пользователь успешно добавлен!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -54,7 +57,10 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn(fullName);
         Mockito.when(userService.addUser(newUserId, fullName)).thenThrow(new UserAlreadyExistException("User with this id already exists!"));
         SendMessage actual = addHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Пользователь с таким id уже существует!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Пользователь с таким id уже существует!")
+                .build();
         Assertions.assertEquals(expected, actual);
 
     }
@@ -65,7 +71,10 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue("/add", 0, 2)).thenReturn(null);
         Mockito.when(parser.getParamValue("/add", 1, 2)).thenReturn(null);
         SendMessage actual = addHandler.operate(chatId, authorization, new ParsedCommand(Command.ADD_DUTY, "/add"));
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Команда введена неверно!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Команда введена неверно!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -75,7 +84,10 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 2)).thenReturn(String.valueOf(newUserId));
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn(fullName);
         SendMessage actual = addHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Команда не доступна!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Команда не доступна!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 

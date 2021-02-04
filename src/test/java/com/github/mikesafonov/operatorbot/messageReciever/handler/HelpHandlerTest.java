@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class HelpHandlerTest {
-    private UserService userService;
     private final HelpHandler helpHandler = new HelpHandler();
 
     private final User user = new User();
@@ -48,7 +47,10 @@ public class HelpHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }
@@ -58,7 +60,10 @@ public class HelpHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }
@@ -69,7 +74,10 @@ public class HelpHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }
@@ -79,7 +87,11 @@ public class HelpHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected =
+                SendMessage.builder()
+                        .chatId(Long.toString(chatId))
+                        .text(text.toString())
+                        .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }

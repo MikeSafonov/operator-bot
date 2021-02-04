@@ -20,13 +20,17 @@ public class StartChatHandler implements MessageHandler {
     }
 
     private SendMessage getDutyChatMessage(long chatId, AuthorizationTelegram user) {
-        SendMessage sendMessage = new SendMessage().setChatId(chatId);
         if (user.isUnknown()) {
-            sendMessage.setText("Команда не доступна!");
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Команда не доступна!")
+                    .build();
         } else {
             userService.updateUserChatStatus(chatId, ChatStatus.IN_CHAT);
-            sendMessage.setText("Введите сообщение дежурному.");
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Введите сообщение дежурному.")
+                    .build();
         }
-        return sendMessage;
     }
 }

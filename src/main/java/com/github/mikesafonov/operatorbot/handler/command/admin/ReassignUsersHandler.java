@@ -17,14 +17,17 @@ public class ReassignUsersHandler implements MessageHandler {
 
     @Override
     public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
         if (user.isAdmin()) {
             definitionService.assignUser();
-            sendMessage.setText("Дежурные назначены!");
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Дежурные назначены!")
+                    .build();
         } else {
-            sendMessage.setText("Команда не доступна!");
+            return SendMessage.builder()
+                    .chatId(Long.toString(chatId))
+                    .text("Команда не доступна!")
+                    .build();
         }
-        return sendMessage;
     }
 }

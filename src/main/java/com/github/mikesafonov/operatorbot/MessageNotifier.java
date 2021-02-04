@@ -19,10 +19,13 @@ public class MessageNotifier {
     @Scheduled(cron = "${notifyDutyCron}")
     public void getNotifyDuty() {
         try {
-            SendMessage sendMessage = new SendMessage();
             Timetable timetable = timetableService.findByTodayDate();
-            sendMessage.setChatId(timetable.getUserId().getTelegramId()).setText(timetable.getUserId().getFullName() + ", ты сегодня дежурный!");
-            messageSender.sendMessage(sendMessage);
+            var message = SendMessage.builder()
+                    .chatId(Long.toString(timetable.getUserId().getTelegramId()))
+                    .text(timetable.getUserId().getFullName() + ", ты сегодня дежурный!")
+                    .build();
+
+            messageSender.sendMessage(message);
         } catch (TodayUserNotFoundException e) {
             log.error("We have no duty users today!", e);
         }

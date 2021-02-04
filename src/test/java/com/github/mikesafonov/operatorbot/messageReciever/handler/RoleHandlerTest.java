@@ -8,7 +8,6 @@ import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.UserService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class RoleHandlerTest {
-    private UserService userService;
     private final RoleHandler roleHandler = new RoleHandler();
 
     private final User user = new User();
@@ -44,7 +42,10 @@ public class RoleHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(adminText);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(adminText)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -53,7 +54,10 @@ public class RoleHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(internalUserText);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(internalUserText)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -63,7 +67,10 @@ public class RoleHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(externalUserText);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(externalUserText)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -72,7 +79,10 @@ public class RoleHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(unknownUserText);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(unknownUserText)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 }

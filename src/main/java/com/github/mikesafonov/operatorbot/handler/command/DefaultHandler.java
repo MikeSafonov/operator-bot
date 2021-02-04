@@ -12,6 +12,9 @@ public class DefaultHandler implements MessageHandler {
     }
 
     private SendMessage getMessageDefault(long chatId) {
-        return new SendMessage().setChatId(chatId).setText("Выберите действие.");
+        return SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Выберите действие.")
+                .build();
     }
 }

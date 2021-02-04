@@ -48,7 +48,10 @@ public class UpdateDutyHandler implements MessageHandler {
         } else {
             text.append("Команда не доступна!");
         }
-        return new SendMessage().setChatId(chatId).setText(text.toString());
+        return SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
     }
 
     private void updateDuty(String message) {

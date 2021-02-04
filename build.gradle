@@ -39,7 +39,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
 
-	implementation 'com.github.xabgesagtx:telegram-spring-boot-starter:0.22'
+	implementation "org.telegram:telegrambots-spring-boot-starter:5.0.1"
 	implementation 'org.mockito:mockito-core'
 
 	implementation("io.micrometer:micrometer-core")

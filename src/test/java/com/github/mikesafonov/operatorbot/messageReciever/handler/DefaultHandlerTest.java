@@ -33,7 +33,10 @@ public class DefaultHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
 
         SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -42,7 +45,10 @@ public class DefaultHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -51,7 +57,10 @@ public class DefaultHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
 
         SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -60,7 +69,10 @@ public class DefaultHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
         SendMessage actual = defaultHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 }

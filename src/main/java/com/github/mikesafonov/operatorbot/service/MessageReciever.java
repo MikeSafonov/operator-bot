@@ -38,7 +38,10 @@ public class MessageReciever {
             return messageHandler.operate(chatId, user, parsedCommand);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return new SendMessage(update.getMessage().getChatId(),  "Произошла ошибка. Обратитесь к администратору");
+            return SendMessage.builder()
+                    .chatId(Long.toString(update.getMessage().getChatId()))
+                    .text("Произошла ошибка. Обратитесь к администратору")
+                    .build();
         }
     }
 

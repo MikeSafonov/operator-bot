@@ -41,7 +41,7 @@ public class MessageNotifierTest {
     @Test
     public void shouldNotifyDuty() throws TodayUserNotFoundException {
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
-        sendMessage.setChatId(id);
+        sendMessage.setChatId(Long.toString(id));
         sendMessage.setText(message);
         messageNotifier.getNotifyDuty();
         Mockito.verify(messageSender, Mockito.times(1)).sendMessage(sendMessage);
@@ -50,7 +50,7 @@ public class MessageNotifierTest {
     @Test
     public void shouldNotNotifyDuty() throws TodayUserNotFoundException {
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We don't have duty today!"));
-        sendMessage.setChatId(id);
+        sendMessage.setChatId(Long.toString(id));
         sendMessage.setText(message);
         messageNotifier.getNotifyDuty();
         Mockito.verify(messageSender, Mockito.times(0)).sendMessage(sendMessage);

@@ -23,7 +23,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class WhoHandlerTest {
     @Mock
     private TimetableService timetableService;
-    private UserService userService;
 
     private WhoHandler whoHandler;
 
@@ -56,7 +55,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text + timetable.getUserId().getFullName());
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text + timetable.getUserId().getFullName())
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -67,7 +69,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoDuty);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(textWhenNoDuty)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -79,7 +84,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text + timetable.getUserId().getFullName());
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text + timetable.getUserId().getFullName())
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -90,7 +98,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoDuty);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(textWhenNoDuty)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -103,7 +114,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(textWhenNoAccess)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -115,7 +129,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(textWhenNoAccess)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -127,7 +144,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(textWhenNoAccess)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -138,7 +158,10 @@ public class WhoHandlerTest {
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(textWhenNoAccess)
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 }

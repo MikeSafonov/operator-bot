@@ -45,7 +45,10 @@ public class WhenMeHandler implements MessageHandler {
         } else {
             text.append("Команда не доступна!");
         }
-        return new SendMessage().setText(text.toString()).setChatId(chatId);
+        return SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
     }
 
     private List<Timetable> getListOfDuties(long chatId, int amount) {

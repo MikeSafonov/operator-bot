@@ -26,7 +26,7 @@ public class TimetableServiceImpl implements TimetableService {
     private final UserService userService;
 
     @Override
-    public Timetable findByTodayDate() throws TodayUserNotFoundException {
+    public Timetable findByTodayDate() {
         return timetableRepository.findByTime((LocalDate.now()))
                 .orElseThrow(() -> new TodayUserNotFoundException("User not found!"));
     }

@@ -8,7 +8,6 @@ import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.UserService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class StartHandlerTest {
-    private UserService userService;
     private final StartHandler startHandler = new StartHandler();
 
     private final User user = new User();
@@ -46,7 +44,10 @@ public class StartHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected =  SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }
@@ -56,7 +57,10 @@ public class StartHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected =  SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }
@@ -67,7 +71,12 @@ public class StartHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected =
+                SendMessage.builder()
+                        .chatId(Long.toString(chatId))
+                        .text(text.toString())
+                        .build();
+
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }
@@ -77,7 +86,10 @@ public class StartHandlerTest {
         AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText(text.toString());
+        SendMessage expected =  SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text(text.toString())
+                .build();
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }

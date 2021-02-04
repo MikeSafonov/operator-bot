@@ -55,7 +55,10 @@ public class UpdateDutyHandlerTest {
         Mockito.when(userService.findByTelegramId(111)).thenReturn(Optional.of(duty));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Дежурный успешно обновлен!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Дежурный успешно обновлен!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -70,7 +73,10 @@ public class UpdateDutyHandlerTest {
         Mockito.when(userService.findByTelegramId(111)).thenReturn(Optional.of(duty));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Дежурный успешно обновлен!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Дежурный успешно обновлен!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -86,7 +92,10 @@ public class UpdateDutyHandlerTest {
         Mockito.when(timetableService.findByDate(date)).thenReturn(Optional.of(new Timetable()));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Пользователя с таким id не существует!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Пользователя с таким id не существует!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -102,7 +111,10 @@ public class UpdateDutyHandlerTest {
         Mockito.when(userService.findByTelegramId(111)).thenReturn(Optional.of(duty));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Команда введена неверно!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Команда введена неверно!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -110,7 +122,10 @@ public class UpdateDutyHandlerTest {
     public void shouldReturnMessageWhenUserNotAdmin() {
         Mockito.when(authorization.isAdmin()).thenReturn(false);
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Команда не доступна!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Команда не доступна!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 }

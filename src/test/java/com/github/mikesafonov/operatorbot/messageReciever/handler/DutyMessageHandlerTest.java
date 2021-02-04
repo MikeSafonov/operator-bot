@@ -40,7 +40,7 @@ public class DutyMessageHandlerTest {
     }
 
     @Test
-    public void shouldReturnMessageForDuty() throws TodayUserNotFoundException {
+    public void shouldReturnMessageForDuty() {
         long dutyId = 1;
         duty.setTelegramId(dutyId);
         Timetable timetable = new Timetable();
@@ -53,19 +53,25 @@ public class DutyMessageHandlerTest {
         Mockito.when(authorization.getUserFullName()).thenReturn(issuer.getFullName());
 
         SendMessage actual = dutyMessageHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(dutyId).setText(issuer.getFullName() + "\n" + "\n" + parsedCommand.getText());
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(dutyId))
+                .text(issuer.getFullName() + "\n" + "\n" + parsedCommand.getText())
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldReturnMessageWhenNoDuty() throws TodayUserNotFoundException {
+    public void shouldReturnMessageWhenNoDuty() {
         issuer.setChatStatus(ChatStatus.NONE);
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException(""));
         Mockito.when(authorization.getUserFullName()).thenReturn(issuer.getFullName());
 
         SendMessage actual = dutyMessageHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = new SendMessage().setChatId(chatId).setText("Что-то пошло не так! Дежурный не на месте!");
+        SendMessage expected = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .text("Что-то пошло не так! Дежурный не на месте!")
+                .build();
         Assertions.assertEquals(expected, actual);
     }
 }

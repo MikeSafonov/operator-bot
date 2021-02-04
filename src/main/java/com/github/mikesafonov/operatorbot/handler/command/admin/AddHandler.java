@@ -24,28 +24,27 @@ public class AddHandler implements MessageHandler {
     }
 
     private SendMessage getAddingMessage(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
+        var builder = SendMessage.builder()
+                .chatId(Long.toString(chatId));
+
         if (user.isAdmin()) {
             try {
-                if(parsedCommand.getCommand().equals(Command.ADD_USER)) {
+                if (parsedCommand.getCommand().equals(Command.ADD_USER)) {
                     addUser(parsedCommand.getText());
-                    sendMessage.setText("Пользователь успешно добавлен!");
-                } else if(parsedCommand.getCommand().equals(Command.ADD_DUTY)) {
+                    return builder.text("Пользователь успешно добавлен!").build();
+                } else if (parsedCommand.getCommand().equals(Command.ADD_DUTY)) {
                     addDutyUser(parsedCommand.getText());
-                    sendMessage.setText("Пользователь-дежурный успешно добавлен!");
+                    return builder.text("Пользователь-дежурный успешно добавлен!").build();
                 }
             } catch (UserAlreadyExistException e) {
                 log.error("User with this id already exists!", e);
-                sendMessage.setText("Пользователь с таким id уже существует!");
+                return builder.text("Пользователь с таким id уже существует!").build();
             } catch (CommandFormatException e) {
                 log.error("Incorrect command format", e);
-                sendMessage.setText("Команда введена неверно!");
+                return builder.text("Команда введена неверно!").build();
             }
-        } else {
-            sendMessage.setText("Команда не доступна!");
         }
-        return sendMessage;
+        return builder.text("Команда не доступна!").build();
     }
 
     private void addUser(String message) {

@@ -19,7 +19,7 @@ class ReassignUsersHandlerTest {
     private ReassignUsersHandler handler;
     private long chatId = 0;
     private AuthorizationTelegram user;
-    private ParsedCommand command;
+    private ParsedCommand command = null;
 
     @BeforeEach
     void setUp() {
