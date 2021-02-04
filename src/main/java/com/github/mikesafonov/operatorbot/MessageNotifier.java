@@ -16,7 +16,7 @@ public class MessageNotifier {
     private final TimetableService timetableService;
     private final MessageSender messageSender;
 
-    @Scheduled(cron = "${assignDutyCron}")
+    @Scheduled(cron = "${notifyDutyCron}")
     public void getNotifyDuty() {
         try {
             SendMessage sendMessage = new SendMessage();
