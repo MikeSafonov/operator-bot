@@ -19,4 +19,6 @@ public class User {
 	private Status status;
 	@Column(name = "role")
 	private Role role;
+	@Column(name = "chat_status")
+	private ChatStatus chatStatus;
 }

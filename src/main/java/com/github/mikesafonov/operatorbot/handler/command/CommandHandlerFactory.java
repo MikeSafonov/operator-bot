@@ -36,6 +36,8 @@ public class CommandHandlerFactory {
                 return new WhenMeHandler(timetableService, userService, parser);
             case UPDATE_DUTY:
                 return new UpdateDutyHandler(timetableService, userService, parser);
+            case START_CHAT:
+                return new StartChatHandler(userService);
             default:
                 return new DefaultHandler();
         }
