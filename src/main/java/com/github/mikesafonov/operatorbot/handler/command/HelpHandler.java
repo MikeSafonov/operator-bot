@@ -1,29 +1,57 @@
 package com.github.mikesafonov.operatorbot.handler.command;
 
+import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.handler.MessageHandler;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class HelpHandler implements MessageHandler {
     private static final String END_LINE = "\n";
 
     @Override
     public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
-        return getMessageHelp(chatId);
+        var builder = SendMessage.builder()
+                .chatId(Long.toString(chatId))
+                .parseMode(ParseMode.MARKDOWN);
+
+        if (user.isAdmin()) {
+            return builder.text(buildAdminMessage()).build();
+        }
+
+        if (user.isExternal()) {
+            return builder.text(buildUserMessage()).build();
+        }
+
+        if (user.isInternal()) {
+            return builder.text(buildDutyMessage()).build();
+        }
+
+        return builder.text("Обратитесь к администратору").build();
     }
 
-    private SendMessage getMessageHelp(long chatId) {
-        StringBuilder text = new StringBuilder();
-        text.append("*Список основных сообщений*").append(END_LINE).append(END_LINE);
-        text.append("[/start](/start) - Показать стартовое сообщение.").append(END_LINE);
-        text.append("[/help](/help) - Помощь.").append(END_LINE);
-        text.append("[/role](/role) - Узнать свою роль.").append(END_LINE);
-        return SendMessage.builder()
-                .chatId(Long.toString(chatId))
-                .text(text.toString())
-                .parseMode(ParseMode.MARKDOWN)
-                .build();
+    private String buildAdminMessage() {
+        return Arrays.stream(Command.values())
+                .filter(Command::isAdmin)
+                .map(Command::getDescription)
+                .collect(Collectors.joining(END_LINE));
+    }
+
+    private String buildUserMessage() {
+        return Arrays.stream(Command.values())
+                .filter(Command::isExternal)
+                .map(Command::getDescription)
+                .collect(Collectors.joining(END_LINE));
+    }
+
+    private String buildDutyMessage() {
+        return Arrays.stream(Command.values())
+                .filter(Command::isInternal)
+                .map(Command::getDescription)
+                .collect(Collectors.joining(END_LINE));
     }
 }

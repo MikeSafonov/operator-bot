@@ -8,33 +8,29 @@ import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
-import com.github.mikesafonov.operatorbot.service.UserService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUnknown;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-public class HelpHandlerTest {
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class HelpHandlerTest {
     private final HelpHandler helpHandler = new HelpHandler();
 
     private final User user = new User();
-    private final StringBuilder text = new StringBuilder();
     private final long chatId = 0;
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.HELP, "/help");
 
     @BeforeEach
     public void setUp() {
-        String END_LINE = "\n";
-        text.append("*Список основных сообщений*").append(END_LINE).append(END_LINE);
-        text.append("[/start](/start) - Показать стартовое сообщение.").append(END_LINE);
-        text.append("[/help](/help) - Помощь.").append(END_LINE);
-        text.append("[/role](/role) - Узнать свою роль.").append(END_LINE);
-
         user.setFullName("User");
         user.setTelegramId(chatId);
         user.setStatus(Status.ACTIVE);
@@ -43,56 +39,77 @@ public class HelpHandlerTest {
     }
 
     @Test
-    public void shouldReturnHelpMessageWithAdmin() {
+    void shouldReturnHelpMessageWithAdmin() {
         AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
                 .chatId(Long.toString(chatId))
-                .text(text.toString())
+                .text(buildAdminMessage())
+                .parseMode(ParseMode.MARKDOWN)
                 .build();
-        expected.enableMarkdown(true);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldReturnHelpMessageWithInternalUser() {
+    void shouldReturnHelpMessageWithInternalUser() {
         AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
                 .chatId(Long.toString(chatId))
-                .text(text.toString())
+                .text(buildDutyMessage())
+                .parseMode(ParseMode.MARKDOWN)
                 .build();
-        expected.enableMarkdown(true);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldReturnHelpMessageWithExternalUser() {
+    void shouldReturnHelpMessageWithExternalUser() {
         user.setRole(Role.USER);
         AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
                 .chatId(Long.toString(chatId))
-                .text(text.toString())
+                .text(buildUserMessage())
+                .parseMode(ParseMode.MARKDOWN)
                 .build();
-        expected.enableMarkdown(true);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldReturnHelpMessageWithUnknownUser() {
+    void shouldReturnHelpMessageWithUnknownUser() {
         AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =
                 SendMessage.builder()
                         .chatId(Long.toString(chatId))
-                        .text(text.toString())
+                        .text("Обратитесь к администратору")
+                        .parseMode(ParseMode.MARKDOWN)
                         .build();
-        expected.enableMarkdown(true);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    private String buildAdminMessage() {
+        return Arrays.stream(Command.values())
+                .filter(Command::isAdmin)
+                .map(Command::getDescription)
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String buildUserMessage() {
+        return Arrays.stream(Command.values())
+                .filter(Command::isExternal)
+                .map(Command::getDescription)
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String buildDutyMessage() {
+        return Arrays.stream(Command.values())
+                .filter(Command::isInternal)
+                .map(Command::getDescription)
+                .collect(Collectors.joining("\n"));
     }
 }
