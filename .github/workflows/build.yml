@@ -54,6 +54,13 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       # Run test
       - name: Run Test
         run: ./gradlew test
@@ -62,12 +69,8 @@ jobs:
       - name: Run Pitest
         run: ./gradlew pitest
 
-      # Run build
-      - name: Run Build
-        run: ./gradlew build jacocoTestReport
-
-      - name: Analyze With SonarCloud
-        run: ./gradlew sonarqube --info
+      - name: Build and Analyze With SonarCloud
+        run: ./gradlew build sonarqube --stacktrace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
