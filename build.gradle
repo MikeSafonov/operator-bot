@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id "jacoco"
 	id 'info.solidsoft.pitest' version '1.5.1'
+	id "org.sonarqube" version "3.0"
 }
 
 pitest {
@@ -74,5 +75,11 @@ jacocoTestReport {
 	reports {
 		xml.enabled true
 		csv.enabled false
+	}
+}
+
+sonarqube {
+	properties {
+		property "sonar.sourceEncoding", "UTF-8"
 	}
 }
