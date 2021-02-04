@@ -43,18 +43,27 @@ public class DefinitionServiceImpl implements DefinitionService {
             additionalDayOffService.findByDay(date)
                     .ifPresentOrElse(
                             value -> log.debug(date.toString() + " is day off!"),
-                            () -> assignUser(date)
-                    );
+                            () -> assignUser(date));
         }
     }
 
     private void assignUser(LocalDate date) {
         if (isWorkday(date)) {
             timetableService.findByDate(date).ifPresentOrElse(
-                    value -> log.debug("User: " + value.getUserId().getFullName() + " has already been assigned! Date is " + date.toString()),
+                    value -> log.debug("User: " + value.getUserId().getFullName() +
+                            " has already been assigned! Date is " + date.toString()),
                     () -> assignUser(getUserForDuty(), date));
         } else {
             log.debug(date.toString() + " is weekend!");
+        }
+    }
+
+    private void assignUser(User user, LocalDate date) {
+        try {
+            timetableService.addNote(user, date);
+            log.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
+        } catch (UserNotFoundException e) {
+            log.error("Expected user for assigning not found!", e);
         }
     }
 
@@ -67,18 +76,9 @@ public class DefinitionServiceImpl implements DefinitionService {
         return true;
     }
 
-    private void assignUser(User user, LocalDate date) {
-        try {
-            timetableService.addNote(user, date);
-            log.debug("User: " + user.getFullName() + " is assigned! Date is " + date.toString());
-        } catch (UserNotFoundException e) {
-            log.error("Expected user for assigning not found!", e);
-        }
-    }
-
     private User getUserForDuty() {
-        return userService.findUserByUserStatusAndLastDutyDate()
-                .or(userService::findFirstOrderByFullName)
+        return userService.findDutyByRoleByStatusOrderByFullNameAsc()
+                .or(userService::findUserByUserStatusAndLastDutyDate)
                 .orElseThrow(() -> new UserNotFoundException("No users! No one to appoint for duty!"));
     }
 }
