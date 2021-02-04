@@ -223,7 +223,7 @@ public class DefinitionServiceTest {
 
         Mockito.doReturn(fixedClock.instant()).when(clock).instant();
         Mockito.doReturn(fixedClock.getZone()).when(clock).getZone();
-        Mockito.when(userService.findFirstDutyOrderByFullName()).thenReturn(Optional.of(user));
+        Mockito.when(userService.findFirstOrderByFullName()).thenReturn(Optional.of(user));
         Mockito.when(additionalWorkdayService.findByDay(LocalDate.now(fixedClock))).thenReturn(Optional.of(new AdditionalWorkday()));
         Mockito.when(configService.findByConfig("configAdditionalDays")).thenReturn(configTable);
         Mockito.when(userService.findById(user.getId())).thenReturn(user);
