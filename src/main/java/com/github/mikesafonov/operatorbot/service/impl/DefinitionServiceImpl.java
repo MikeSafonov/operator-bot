@@ -78,7 +78,7 @@ public class DefinitionServiceImpl implements DefinitionService {
 
     private User getUserForDuty() {
         return userService.findUserByUserStatusAndLastDutyDate()
-                .or(userService::findFirstDutyOrderByFullName)
+                .or(userService::findFirstOrderByFullName)
                 .orElseThrow(() -> new UserNotFoundException("No users! No one to appoint for duty!"));
     }
 }

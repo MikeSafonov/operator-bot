@@ -4,10 +4,10 @@ import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.exceptions.TodayUserNotFoundException;
 import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
-import com.github.mikesafonov.operatorbot.model.Timetable;
-import com.github.mikesafonov.operatorbot.model.User;
+import com.github.mikesafonov.operatorbot.model.*;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
+import com.github.mikesafonov.operatorbot.service.UserService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
@@ -23,9 +23,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class WhoHandlerTest {
     @Mock
     private TimetableService timetableService;
+    private UserService userService;
 
     private WhoHandler whoHandler;
 
+    private final User user = new User();
     private final long chatId = 0;
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.WHO, "/who");
     private final Timetable timetable = new Timetable();
@@ -38,96 +40,104 @@ public class WhoHandlerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         whoHandler = new WhoHandler(timetableService);
+
+        user.setFullName("User");
+        user.setTelegramId(chatId);
+        user.setStatus(Status.ACTIVE);
+        user.setRole(Role.DUTY);
+        user.setChatStatus(ChatStatus.NONE);
     }
 
     @Test
     public void shouldReturnWhoMessageWithAdminWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramAdmin();
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text + timetable.getUserId().getFullName());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithAdminWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramInternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoDuty);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithInternalUserWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramInternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(text + timetable.getUserId().getFullName());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithInternalUserWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramInternal();
+        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoDuty);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithExternalUserWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramExternal();
+        user.setRole(Role.USER);
+        AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithExternalUserWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramExternal();
+        user.setRole(Role.USER);
+        AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithUnknownUserWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramUnknown();
+        AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnWhoMessageWithUnknownUserWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram user = new AuthorizationTelegramUnknown();
+        AuthorizationTelegram authorization = new AuthorizationTelegramUnknown();
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
-        SendMessage actual = whoHandler.operate(chatId, user, parsedCommand);
+        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = new SendMessage().setChatId(chatId).setText(textWhenNoAccess);
         Assertions.assertEquals(expected, actual);
     }

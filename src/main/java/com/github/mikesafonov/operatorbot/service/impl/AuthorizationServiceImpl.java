@@ -13,33 +13,32 @@ import java.util.Set;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
-	private Set<Long> userId;
+    private Set<Long> userId;
 
-	private final UserService userService;
+    private final UserService userService;
 
-	public AuthorizationServiceImpl(UserService userService, @Value("${admin.list}")Set<Long> userId) {
-		this.userService = userService;
-		this.userId = userId;
+    public AuthorizationServiceImpl(UserService userService, @Value("${admin.list}") Set<Long> userId) {
+        this.userService = userService;
+        this.userId = userId;
 
-	}
+    }
 
-	@Override
-	public AuthorizationTelegram getInfo(long telegramId) {
-		Optional<User> optionalUser = userService.findByTelegramId(telegramId);
-		if (optionalUser.isPresent()) {
-			if (userId.contains(telegramId)) {
-				return new AuthorizationTelegramAdmin();
-			}
-			else {
-				if(optionalUser.get().getRole().equals(Role.DUTY)) {
-					return new AuthorizationTelegramInternal();
-				} else {
-					return new AuthorizationTelegramExternal();
-				}
-			}
-		} else {
-			return new AuthorizationTelegramUnknown();
-		}
-	}
+    @Override
+    public AuthorizationTelegram getInfo(long telegramId) {
+        Optional<User> optionalUser = userService.findByTelegramId(telegramId);
+        if (optionalUser.isPresent()) {
+            if (userId.contains(telegramId)) {
+                return new AuthorizationTelegramAdmin(optionalUser.get());
+            } else {
+                if (optionalUser.get().getRole().equals(Role.DUTY)) {
+                    return new AuthorizationTelegramInternal(optionalUser.get());
+                } else {
+                    return new AuthorizationTelegramExternal(optionalUser.get());
+                }
+            }
+        } else {
+            return new AuthorizationTelegramUnknown();
+        }
+    }
 
 }
