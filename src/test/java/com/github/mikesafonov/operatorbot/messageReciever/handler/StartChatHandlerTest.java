@@ -21,8 +21,8 @@ public class StartChatHandlerTest {
 
     private StartChatHandler startChatHandler;
 
-    private ParsedCommand parsedCommand = new ParsedCommand(Command.START_CHAT, "/start_chat");
-    long chatId = 0;
+    private final ParsedCommand parsedCommand = new ParsedCommand(Command.START_CHAT, "/start_chat");
+    private final String chatId = "0";
 
     @BeforeEach
     public void setUp() {
@@ -35,7 +35,7 @@ public class StartChatHandlerTest {
         Mockito.when(authorization.isUnknown()).thenReturn(false);
         SendMessage actual = startChatHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Введите сообщение дежурному.")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -46,7 +46,7 @@ public class StartChatHandlerTest {
         Mockito.when(authorization.isUnknown()).thenReturn(true);
         SendMessage actual = startChatHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Команда не доступна!")
                 .build();
         Assertions.assertEquals(expected, actual);

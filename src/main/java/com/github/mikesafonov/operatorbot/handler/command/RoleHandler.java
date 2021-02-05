@@ -7,13 +7,13 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class RoleHandler implements MessageHandler {
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         return getMessageRole(chatId, user);
     }
 
-    private SendMessage getMessageRole(long chatId, AuthorizationTelegram user) {
+    private SendMessage getMessageRole(String chatId, AuthorizationTelegram user) {
         var builder = SendMessage.builder()
-                .chatId(Long.toString(chatId));
+                .chatId(chatId);
 
         if (user.isAdmin()) {
             return builder.text("Вы администратор.").build();

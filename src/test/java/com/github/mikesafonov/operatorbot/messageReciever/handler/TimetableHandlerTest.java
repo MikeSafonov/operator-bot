@@ -30,7 +30,7 @@ class TimetableHandlerTest {
     private Parser parser;
     private TimetableHandler handler;
     private AuthorizationTelegram user;
-    private long chatId = 0;
+    private String chatId = "0";
 
     @BeforeEach
     void setUp() {

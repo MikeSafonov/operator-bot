@@ -13,18 +13,18 @@ import java.util.Set;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
-    private Set<Long> userId;
+    private Set<String> userId;
 
     private final UserService userService;
 
-    public AuthorizationServiceImpl(UserService userService, @Value("${admin.list}") Set<Long> userId) {
+    public AuthorizationServiceImpl(UserService userService, @Value("${admin.list}") Set<String> userId) {
         this.userService = userService;
         this.userId = userId;
 
     }
 
     @Override
-    public AuthorizationTelegram getInfo(long telegramId) {
+    public AuthorizationTelegram getInfo(String telegramId) {
         Optional<User> optionalUser = userService.findByTelegramId(telegramId);
         if (optionalUser.isPresent()) {
             if (userId.contains(telegramId)) {

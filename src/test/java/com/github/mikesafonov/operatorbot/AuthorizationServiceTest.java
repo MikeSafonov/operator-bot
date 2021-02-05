@@ -23,8 +23,8 @@ public class AuthorizationServiceTest {
 
 	private AuthorizationService service;
 
-	Set<Long> adminList = new HashSet<>();
-	long adminId = 000000;
+	Set<String> adminList = new HashSet<>();
+	String adminId = "000000";
 
 	@BeforeEach
 	public void setUp() {
@@ -35,7 +35,7 @@ public class AuthorizationServiceTest {
 
 	@Test
 	public void shouldReturnUnknownAuthorization() {
-		long telegramId = 111111;
+		String telegramId = "111111";
 		AuthorizationTelegram auth = service.getInfo(telegramId);
 
 		Assertions.assertNotNull(auth);
@@ -48,7 +48,7 @@ public class AuthorizationServiceTest {
 
 	@Test
 	public void shouldReturnInternalAuthorization() {
-		long telegramId = 111111;
+		String telegramId = "111111";
 		User user = new User();
 		user.setRole(Role.DUTY);
 
@@ -65,7 +65,7 @@ public class AuthorizationServiceTest {
 
 	@Test
 	public void shouldReturnExternalAuthorization() {
-		long telegramId = 111111;
+		String telegramId = "111111";
 		User user = new User();
 		user.setRole(Role.USER);
 
@@ -82,7 +82,7 @@ public class AuthorizationServiceTest {
 
 	@Test
 	public void shouldReturnAdminAuthorization() {
-		long telegramId = 000000;
+		String telegramId = "000000";
 
 		Mockito.when(userService.findByTelegramId(telegramId)).thenReturn(Optional.of(new User()));
 		AuthorizationTelegram auth = service.getInfo(telegramId);

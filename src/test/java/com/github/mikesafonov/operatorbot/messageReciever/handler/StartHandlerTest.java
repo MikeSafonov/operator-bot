@@ -22,7 +22,7 @@ public class StartHandlerTest {
 
     private final User user = new User();
     private final StringBuilder text = new StringBuilder();
-    private final long chatId = 0;
+    private final String chatId = "0";
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.START, "/start");
 
     @BeforeEach
@@ -45,7 +45,7 @@ public class StartHandlerTest {
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =  SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text.toString())
                 .build();
         expected.enableMarkdown(true);
@@ -58,7 +58,7 @@ public class StartHandlerTest {
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =  SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text.toString())
                 .build();
         expected.enableMarkdown(true);
@@ -73,7 +73,7 @@ public class StartHandlerTest {
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =
                 SendMessage.builder()
-                        .chatId(Long.toString(chatId))
+                        .chatId(chatId)
                         .text(text.toString())
                         .build();
 
@@ -87,7 +87,7 @@ public class StartHandlerTest {
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =  SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text.toString())
                 .build();
         expected.enableMarkdown(true);

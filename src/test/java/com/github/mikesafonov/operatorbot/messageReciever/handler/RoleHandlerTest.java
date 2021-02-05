@@ -21,7 +21,7 @@ public class RoleHandlerTest {
     private final RoleHandler roleHandler = new RoleHandler();
 
     private final User user = new User();
-    private final long chatId = 0;
+    private final String chatId = "0";
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.ROLE, "/role");
     private final String adminText = "Вы администратор.";
     private final String internalUserText = "Вы внутренний пользователь.";
@@ -43,7 +43,7 @@ public class RoleHandlerTest {
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(adminText)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -55,7 +55,7 @@ public class RoleHandlerTest {
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(internalUserText)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -68,7 +68,7 @@ public class RoleHandlerTest {
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(externalUserText)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -80,7 +80,7 @@ public class RoleHandlerTest {
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(unknownUserText)
                 .build();
         Assertions.assertEquals(expected, actual);

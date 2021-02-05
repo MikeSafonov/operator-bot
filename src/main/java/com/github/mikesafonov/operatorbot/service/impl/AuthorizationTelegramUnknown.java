@@ -31,8 +31,8 @@ public class AuthorizationTelegramUnknown implements AuthorizationTelegram {
     }
 
     @Override
-    public long getTelegramId() {
-        return 0;
+    public String getTelegramId() {
+        return "0";
     }
 
     @Override

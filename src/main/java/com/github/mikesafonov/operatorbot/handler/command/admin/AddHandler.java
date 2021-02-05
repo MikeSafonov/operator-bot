@@ -19,13 +19,13 @@ public class AddHandler implements MessageHandler {
     private final Parser parser;
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         return getAddingMessage(chatId, user, parsedCommand);
     }
 
-    private SendMessage getAddingMessage(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    private SendMessage getAddingMessage(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         var builder = SendMessage.builder()
-                .chatId(Long.toString(chatId));
+                .chatId(chatId);
 
         if (user.isAdmin()) {
             try {
@@ -48,7 +48,7 @@ public class AddHandler implements MessageHandler {
     }
 
     private void addUser(String message) {
-        Long id = getIdFromMessage(message);
+        String id = getIdFromMessage(message);
         String fullName = getFullNameFromMessage(message);
         if (id != null && fullName != null) {
             userService.addUser(id, fullName);
@@ -58,7 +58,7 @@ public class AddHandler implements MessageHandler {
     }
 
     private void addDutyUser(String message) {
-        Long id = getIdFromMessage(message);
+        String id = getIdFromMessage(message);
         String fullName = getFullNameFromMessage(message);
         if (id != null && fullName != null) {
             userService.addUserDuty(id, fullName);
@@ -67,9 +67,9 @@ public class AddHandler implements MessageHandler {
         }
     }
 
-    private Long getIdFromMessage(String message) {
+    private String getIdFromMessage(String message) {
         try {
-            return Long.parseLong(parser.getParamValue(message, 0, 2));
+            return parser.getParamValue(message, 0, 2);
         } catch (NumberFormatException e) {
             return null;
         }

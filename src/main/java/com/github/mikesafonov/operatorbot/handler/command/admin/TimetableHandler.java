@@ -21,13 +21,13 @@ public class TimetableHandler implements MessageHandler {
     private final Parser parser;
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         if (user.isAdmin()) {
             int count = getCountFromMessage(parsedCommand.getText());
             var timetable = timetableService.findTimetableInFuture(count);
             if (timetable.isEmpty()) {
                 return SendMessage.builder()
-                        .chatId(Long.toString(chatId))
+                        .chatId(chatId)
                         .text("Нет назначенных дежурств")
                         .build();
             }
@@ -35,13 +35,13 @@ public class TimetableHandler implements MessageHandler {
                     .map(t -> t.getTime().toString() + " - " + t.getUserId().getFullName())
                     .collect(Collectors.joining("\n"));
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text(message)
                     .build();
 
         } else {
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Команда не доступна!")
                     .build();
         }

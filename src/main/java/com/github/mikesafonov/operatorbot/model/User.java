@@ -14,7 +14,7 @@ public class User {
 	@Column(name = "full_name")
 	private String fullName;
 	@Column(name = "telegram_id")
-	private long telegramId;
+	private String telegramId;
 	@Column(name = "status")
 	private Status status;
 	@Column(name = "role")

@@ -25,11 +25,11 @@ public class UpdateDutyHandler implements MessageHandler {
     private final Parser parser;
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         return getDutyUpdatingMessage(chatId, parsedCommand.getText(), user);
     }
 
-    private SendMessage getDutyUpdatingMessage(long chatId, String message, AuthorizationTelegram user) {
+    private SendMessage getDutyUpdatingMessage(String chatId, String message, AuthorizationTelegram user) {
         StringBuilder text = new StringBuilder();
         if(user.isAdmin()) {
             try {
@@ -49,14 +49,14 @@ public class UpdateDutyHandler implements MessageHandler {
             text.append("Команда не доступна!");
         }
         return SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text.toString())
                 .build();
     }
 
     private void updateDuty(String message) {
         LocalDate date = getDateFromMessage(message);
-        Long telegramId = getIdFromMessage(message);
+        String telegramId = getIdFromMessage(message);
         if(date != null && telegramId != null) {
             if(timetableService.findByDate(date).isPresent()) {
                 updateDuty(date, telegramId);
@@ -68,12 +68,12 @@ public class UpdateDutyHandler implements MessageHandler {
         }
     }
 
-    private void addDuty(LocalDate date, long telegramId) {
+    private void addDuty(LocalDate date, String telegramId) {
         User user = userService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         timetableService.addNote(user, date);
     }
 
-    private void updateDuty(LocalDate date, long telegramId) {
+    private void updateDuty(LocalDate date, String telegramId) {
         User user = userService.findByTelegramId(telegramId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         timetableService.updateUserDate(date, user);
     }
@@ -86,9 +86,9 @@ public class UpdateDutyHandler implements MessageHandler {
         }
     }
 
-    private Long getIdFromMessage(String message) {
+    private String getIdFromMessage(String message) {
         try {
-            return Long.parseLong(parser.getParamValue(message, 1, 2));
+            return parser.getParamValue(message, 1, 2);
         } catch (NumberFormatException e) {
             return null;
         }

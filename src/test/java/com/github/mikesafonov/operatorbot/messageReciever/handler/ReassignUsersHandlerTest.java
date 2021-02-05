@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class ReassignUsersHandlerTest {
     private DefinitionService definitionService;
     private ReassignUsersHandler handler;
-    private long chatId = 0;
+    private String chatId = "0";
     private AuthorizationTelegram user;
     private ParsedCommand command = null;
 

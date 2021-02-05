@@ -21,7 +21,7 @@ public class MessageNotifier {
         try {
             Timetable timetable = timetableService.findByTodayDate();
             var message = SendMessage.builder()
-                    .chatId(Long.toString(timetable.getUserId().getTelegramId()))
+                    .chatId(timetable.getUserId().getTelegramId())
                     .text(timetable.getUserId().getFullName() + ", ты сегодня дежурный!")
                     .build();
 

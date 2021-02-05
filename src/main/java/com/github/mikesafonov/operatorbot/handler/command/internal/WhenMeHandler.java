@@ -25,11 +25,11 @@ public class WhenMeHandler implements MessageHandler {
 
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         return getMessageWhenUserOnDuty(chatId, parsedCommand.getText(), user);
     }
 
-    private SendMessage getMessageWhenUserOnDuty(long chatId, String message, AuthorizationTelegram user) {
+    private SendMessage getMessageWhenUserOnDuty(String chatId, String message, AuthorizationTelegram user) {
         StringBuilder text = new StringBuilder();
         if(user.isInternal()) {
                 Integer amountOfDays = getValueFromMessage(message);
@@ -46,12 +46,12 @@ public class WhenMeHandler implements MessageHandler {
             text.append("Команда не доступна!");
         }
         return SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text.toString())
                 .build();
     }
 
-    private List<Timetable> getListOfDuties(long chatId, int amount) {
+    private List<Timetable> getListOfDuties(String chatId, int amount) {
         return userService.findByTelegramId(chatId)
                 .map(user -> timetableService.findUsersDutyInFuture(user, amount))
                 .map(Slice::getContent)

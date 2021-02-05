@@ -26,7 +26,7 @@ class HelpHandlerTest {
     private final HelpHandler helpHandler = new HelpHandler();
 
     private final User user = new User();
-    private final long chatId = 0;
+    private final String chatId = "0";
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.HELP, "/help");
 
     @BeforeEach
@@ -44,7 +44,7 @@ class HelpHandlerTest {
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(buildAdminMessage())
                 .parseMode(ParseMode.MARKDOWN)
                 .build();
@@ -57,7 +57,7 @@ class HelpHandlerTest {
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(buildDutyMessage())
                 .parseMode(ParseMode.MARKDOWN)
                 .build();
@@ -71,7 +71,7 @@ class HelpHandlerTest {
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(buildUserMessage())
                 .parseMode(ParseMode.MARKDOWN)
                 .build();
@@ -85,7 +85,7 @@ class HelpHandlerTest {
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =
                 SendMessage.builder()
-                        .chatId(Long.toString(chatId))
+                        .chatId(chatId)
                         .text("Обратитесь к администратору")
                         .parseMode(ParseMode.MARKDOWN)
                         .build();

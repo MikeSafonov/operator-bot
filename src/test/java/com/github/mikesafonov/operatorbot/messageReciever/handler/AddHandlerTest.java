@@ -27,8 +27,8 @@ public class AddHandlerTest {
 
     private final String message = "/add 1 N U P";
     private final String fullName = "N U P";
-    private final long chatId = 0;
-    private final long newUserId = 1;
+    private final String chatId = "0";
+    private final String newUserId = "1";
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.ADD_USER, message);
 
     @BeforeEach
@@ -44,7 +44,7 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn(fullName);
         SendMessage actual = addHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Пользователь успешно добавлен!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -58,7 +58,7 @@ public class AddHandlerTest {
         Mockito.when(userService.addUser(newUserId, fullName)).thenThrow(new UserAlreadyExistException("User with this id already exists!"));
         SendMessage actual = addHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Пользователь с таким id уже существует!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -72,7 +72,7 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue("/add", 1, 2)).thenReturn(null);
         SendMessage actual = addHandler.operate(chatId, authorization, new ParsedCommand(Command.ADD_DUTY, "/add"));
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Команда введена неверно!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -85,7 +85,7 @@ public class AddHandlerTest {
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn(fullName);
         SendMessage actual = addHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Команда не доступна!")
                 .build();
         Assertions.assertEquals(expected, actual);
