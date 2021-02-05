@@ -26,7 +26,6 @@ public class DutyMessageHandler implements MessageHandler {
         try {
             Timetable timetable = timetableService.findByTodayDate();
             String id = timetable.getUserId().getTelegramId();
-            userService.updateUserChatStatus(chatId, ChatStatus.NONE);
             return SendMessage.builder()
                     .chatId(id)
                     .text(user.getUserFullName() + "\n\n" + message)

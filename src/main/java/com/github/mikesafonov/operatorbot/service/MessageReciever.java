@@ -30,8 +30,12 @@ public class MessageReciever {
             ParsedCommand parsedCommand = parser.getParsedCommand(message);
             MessageHandler messageHandler;
 
-            if (user.getChatStatus().equals(ChatStatus.IN_CHAT)) {
-                messageHandler = getHandlerForMessage();
+            if (user.isExternal()) {
+                if (parsedCommand.getCommand().equals(Command.NONE)) {
+                    messageHandler = getHandlerForMessage();
+                } else {
+                    messageHandler = getHandlerForCommand(parsedCommand.getCommand());
+                }
             } else {
                 messageHandler = getHandlerForCommand(parsedCommand.getCommand());
             }

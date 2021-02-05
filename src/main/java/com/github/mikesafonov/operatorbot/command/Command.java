@@ -14,8 +14,6 @@ public enum Command {
     WHEN_MY_DUTY(true, false, true, "[/when_my_duty](/when_my_duty) - Узнать когда я дежурный."),
     UPDATE_DUTY(true, false, false, "[/update_duty <<date>> <<telegramId>>](/update_duty) - Назначить дежурного."),
 
-    START_CHAT(false, true, false, "[/start_chat](/start_chat) - Запустить чат с оператором."),
-
     ADD_USER(true, false, false, "[/add_user <<telegramId>> <<fullName>>](/add_user) - Добавить внешнего пользователя."),
     ADD_DUTY(true, false, false, "[/add_duty <<telegramId>> <<fullName>>](/add_duty) - Добавить внутреннего пользователя."),
 
