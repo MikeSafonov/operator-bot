@@ -20,17 +20,17 @@ public class MessageNotifierTest {
     private MessageSender messageSender;
     private MessageNotifier messageNotifier;
 
-    private Timetable timetable = new Timetable();
-    private User duty = new User();
-    private SendMessage sendMessage = new SendMessage();
-    private long id;
+    private final Timetable timetable = new Timetable();
+    private final User duty = new User();
+    private final SendMessage sendMessage = new SendMessage();
+    private String id;
     private String message;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         messageNotifier = new MessageNotifier(timetableService, messageSender);
-        duty.setTelegramId(0);
+        duty.setTelegramId("0");
         duty.setFullName("Duty");
         duty.setStatus(Status.ACTIVE);
         timetable.setUserId(duty);
@@ -41,7 +41,7 @@ public class MessageNotifierTest {
     @Test
     public void shouldNotifyDuty() throws TodayUserNotFoundException {
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
-        sendMessage.setChatId(Long.toString(id));
+        sendMessage.setChatId(id);
         sendMessage.setText(message);
         messageNotifier.getNotifyDuty();
         Mockito.verify(messageSender, Mockito.times(1)).sendMessage(sendMessage);
@@ -50,7 +50,7 @@ public class MessageNotifierTest {
     @Test
     public void shouldNotNotifyDuty() throws TodayUserNotFoundException {
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We don't have duty today!"));
-        sendMessage.setChatId(Long.toString(id));
+        sendMessage.setChatId(id);
         sendMessage.setText(message);
         messageNotifier.getNotifyDuty();
         Mockito.verify(messageSender, Mockito.times(0)).sendMessage(sendMessage);

@@ -13,7 +13,7 @@ public interface AuthorizationTelegram {
 
 	String getUserFullName();
 
-	long getTelegramId();
+	String getTelegramId();
 
 	ChatStatus getChatStatus();
 }

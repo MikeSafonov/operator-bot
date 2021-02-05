@@ -15,20 +15,20 @@ public class StartChatHandler implements MessageHandler {
     private final UserService userService;
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         return getDutyChatMessage(chatId, user);
     }
 
-    private SendMessage getDutyChatMessage(long chatId, AuthorizationTelegram user) {
+    private SendMessage getDutyChatMessage(String chatId, AuthorizationTelegram user) {
         if (user.isUnknown()) {
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Команда не доступна!")
                     .build();
         } else {
             userService.updateUserChatStatus(chatId, ChatStatus.IN_CHAT);
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Введите сообщение дежурному.")
                     .build();
         }

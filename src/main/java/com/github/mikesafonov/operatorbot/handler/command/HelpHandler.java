@@ -14,9 +14,9 @@ public class HelpHandler implements MessageHandler {
     private static final String END_LINE = "\n";
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         var builder = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .parseMode(ParseMode.MARKDOWN);
 
         if (user.isAdmin()) {

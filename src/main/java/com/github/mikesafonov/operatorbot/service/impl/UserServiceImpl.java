@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User addUser(long telegramId, String fullName) {
+    public User addUser(String telegramId, String fullName) {
         if (userRepository.findByTelegramId(telegramId).isPresent()) {
             throw new UserAlreadyExistException("");
         } else {
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUserDuty(long telegramId, String fullName) {
+    public User addUserDuty(String telegramId, String fullName) {
         if (userRepository.findByTelegramId(telegramId).isPresent()) {
             throw new UserAlreadyExistException("");
         } else {
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserRole(long telegramId, Role role) {
+    public void changeUserRole(String telegramId, Role role) {
         userRepository.changeUserRole(telegramId, role);
     }
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByTelegramId(long telegramId) {
+    public Optional<User> findByTelegramId(String telegramId) {
         return userRepository.findByTelegramId(telegramId);
     }
 
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserChatStatus(long telegramId, ChatStatus chatStatus) {
+    public void updateUserChatStatus(String telegramId, ChatStatus chatStatus) {
         userRepository.updateUserChatStatus(telegramId, chatStatus);
     }
 

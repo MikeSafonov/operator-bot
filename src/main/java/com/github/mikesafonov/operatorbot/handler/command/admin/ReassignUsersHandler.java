@@ -16,16 +16,16 @@ public class ReassignUsersHandler implements MessageHandler {
     private final DefinitionService definitionService;
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         if (user.isAdmin()) {
             definitionService.assignUser();
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Дежурные назначены!")
                     .build();
         } else {
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Команда не доступна!")
                     .build();
         }

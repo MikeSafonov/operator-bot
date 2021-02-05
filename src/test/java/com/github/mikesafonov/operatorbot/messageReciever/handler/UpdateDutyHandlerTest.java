@@ -32,7 +32,7 @@ public class UpdateDutyHandlerTest {
     private AuthorizationTelegram authorization;
 
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.UPDATE_DUTY, "/update_duty 2020-12-12 111");
-    private final long chatId = 0;
+    private final String chatId = "0";
 
     private UpdateDutyHandler handler;
 
@@ -46,17 +46,17 @@ public class UpdateDutyHandlerTest {
     public void shouldReturnMessageWhenDutyUpdated() {
         LocalDate date = LocalDate.of(2020, 12, 12);
         User duty = new User();
-        duty.setTelegramId(111);
+        duty.setTelegramId("111");
 
         Mockito.when(authorization.isAdmin()).thenReturn(true);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 2)).thenReturn("2020-12-12");
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn("111");
         Mockito.when(timetableService.findByDate(date)).thenReturn(Optional.of(new Timetable()));
-        Mockito.when(userService.findByTelegramId(111)).thenReturn(Optional.of(duty));
+        Mockito.when(userService.findByTelegramId("111")).thenReturn(Optional.of(duty));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Дежурный успешно обновлен!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -65,16 +65,16 @@ public class UpdateDutyHandlerTest {
     @Test
     public void shouldReturnMessageWhenDutyAdded() {
         User duty = new User();
-        duty.setTelegramId(111);
+        duty.setTelegramId("111");
 
         Mockito.when(authorization.isAdmin()).thenReturn(true);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 2)).thenReturn("2020-12-12");
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn("111");
-        Mockito.when(userService.findByTelegramId(111)).thenReturn(Optional.of(duty));
+        Mockito.when(userService.findByTelegramId("111")).thenReturn(Optional.of(duty));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Дежурный успешно обновлен!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -84,7 +84,7 @@ public class UpdateDutyHandlerTest {
     public void shouldReturnMessageWhenDutyNotExists() {
         LocalDate date = LocalDate.of(2020, 12, 12);
         User duty = new User();
-        duty.setTelegramId(111);
+        duty.setTelegramId("111");
 
         Mockito.when(authorization.isAdmin()).thenReturn(true);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 2)).thenReturn("2020-12-12");
@@ -93,7 +93,7 @@ public class UpdateDutyHandlerTest {
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Пользователя с таким id не существует!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -103,16 +103,16 @@ public class UpdateDutyHandlerTest {
     public void shouldReturnMessageWhenCommandIncorrectCommandFormat() {
         CharSequence charSequence = "202-14-0";
        User duty = new User();
-        duty.setTelegramId(111);
+        duty.setTelegramId("111");
 
         Mockito.when(authorization.isAdmin()).thenReturn(true);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 2)).thenThrow(new DateTimeParseException("", charSequence, 1));
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 1, 2)).thenReturn(null);
-        Mockito.when(userService.findByTelegramId(111)).thenReturn(Optional.of(duty));
+        Mockito.when(userService.findByTelegramId("111")).thenReturn(Optional.of(duty));
 
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Команда введена неверно!")
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -123,7 +123,7 @@ public class UpdateDutyHandlerTest {
         Mockito.when(authorization.isAdmin()).thenReturn(false);
         SendMessage actual = handler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Команда не доступна!")
                 .build();
         Assertions.assertEquals(expected, actual);

@@ -35,7 +35,7 @@ public class AuthorizationTelegramInternal implements AuthorizationTelegram {
     }
 
     @Override
-    public long getTelegramId() {
+    public String getTelegramId() {
         return user.getTelegramId();
     }
 

@@ -23,7 +23,7 @@ public class MessageReciever {
 
     public SendMessage analyze(Update update) {
         try {
-            Long chatId = update.getMessage().getChatId();
+            String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
             AuthorizationTelegram user = userAuthorization.getInfo(chatId);
 

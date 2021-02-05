@@ -18,32 +18,32 @@ public class WhoHandler implements MessageHandler {
     }
 
     @Override
-    public SendMessage operate(long chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
+    public SendMessage operate(String chatId, AuthorizationTelegram user, ParsedCommand parsedCommand) {
         return getWhoMessage(chatId, user);
     }
 
-    private SendMessage getWhoMessage(long chatId, AuthorizationTelegram user) {
+    private SendMessage getWhoMessage(String chatId, AuthorizationTelegram user) {
         if (user.isInternal()) {
             return sendTodayDuty(chatId);
         } else {
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Команда не доступна!")
                     .build();
         }
     }
 
-    private SendMessage sendTodayDuty(long chatId) {
+    private SendMessage sendTodayDuty(String chatId) {
         try {
             Timetable timetable = timetableService.findByTodayDate();
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Дежурный сегодня: " + timetable.getUserId().getFullName())
                     .build();
         } catch (TodayUserNotFoundException e) {
             log.error("We have no duty users today!", e);
             return SendMessage.builder()
-                    .chatId(Long.toString(chatId))
+                    .chatId(chatId)
                     .text("Что-то пошло не так! Дежурный на сегодня не назначен!")
                     .build();
         }

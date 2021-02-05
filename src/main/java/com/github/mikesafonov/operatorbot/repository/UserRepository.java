@@ -30,16 +30,16 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "WHERE t.id IS NULL AND u.role = 1 AND u.status = 0 ORDER BY u.full_name ASC LIMIT 1")
     Optional<User> findDutyByRoleByStatusOrderByFullNameAsc();
 
-    Optional<User> findByTelegramId(long telegramId);
+    Optional<User> findByTelegramId(String telegramId);
 
     @Modifying
     @Query("UPDATE User u SET u.chatStatus = :chatStatus WHERE u.telegramId = :telegramId")
     void updateUserChatStatus(
-            @Param("telegramId") long telegramId, @Param("chatStatus") ChatStatus chatStatus);
+            @Param("telegramId") String telegramId, @Param("chatStatus") ChatStatus chatStatus);
 
     @Modifying
     @Query("UPDATE User u SET u.role = :role WHERE u.telegramId = :telegramId")
-    void changeUserRole(@Param("telegramId") long telegramId, @Param("role") Role role);
+    void changeUserRole(@Param("telegramId") String telegramId, @Param("role") Role role);
 
     List<User> findByRoleAndStatusOrderByFullNameAsc(Role role, Status status);
 }

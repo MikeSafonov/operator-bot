@@ -27,7 +27,7 @@ public class DutyMessageHandlerTest {
     private AuthorizationTelegram authorization;
 
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.NONE, "I have an issue!");
-    private final long chatId = 0;
+    private final String chatId = "0";
     private final User duty = new User();
     private final User issuer = new User();
 
@@ -41,7 +41,7 @@ public class DutyMessageHandlerTest {
 
     @Test
     public void shouldReturnMessageForDuty() {
-        long dutyId = 1;
+        String dutyId = "1";
         duty.setTelegramId(dutyId);
         Timetable timetable = new Timetable();
         timetable.setUserId(duty);
@@ -54,7 +54,7 @@ public class DutyMessageHandlerTest {
 
         SendMessage actual = dutyMessageHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(dutyId))
+                .chatId(dutyId)
                 .text(issuer.getFullName() + "\n" + "\n" + parsedCommand.getText())
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -69,7 +69,7 @@ public class DutyMessageHandlerTest {
 
         SendMessage actual = dutyMessageHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text("Что-то пошло не так! Дежурный не на месте!")
                 .build();
         Assertions.assertEquals(expected, actual);

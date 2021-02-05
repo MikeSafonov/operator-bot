@@ -27,7 +27,7 @@ public class WhoHandlerTest {
     private WhoHandler whoHandler;
 
     private final User user = new User();
-    private final long chatId = 0;
+    private final String chatId = "0";
     private final ParsedCommand parsedCommand = new ParsedCommand(Command.WHO, "/who");
     private final Timetable timetable = new Timetable();
     private final User duty = new User();
@@ -56,7 +56,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text + timetable.getUserId().getFullName())
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -70,7 +70,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(textWhenNoDuty)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -85,7 +85,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(text + timetable.getUserId().getFullName())
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -99,7 +99,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(textWhenNoDuty)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -115,7 +115,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(textWhenNoAccess)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -130,7 +130,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(textWhenNoAccess)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -145,7 +145,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(textWhenNoAccess)
                 .build();
         Assertions.assertEquals(expected, actual);
@@ -159,7 +159,7 @@ public class WhoHandlerTest {
 
         SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(chatId))
+                .chatId(chatId)
                 .text(textWhenNoAccess)
                 .build();
         Assertions.assertEquals(expected, actual);

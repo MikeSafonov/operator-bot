@@ -46,7 +46,7 @@ public class WhenMeHandlerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         handler = new WhenMeHandler(timetableService, userService, parser);
-        user.setTelegramId(1);
+        user.setTelegramId("1");
         user.setFullName("N U P");
         user.setStatus(Status.ACTIVE);
     }
@@ -75,7 +75,7 @@ public class WhenMeHandlerTest {
         Page page = new PageImpl(timetableList);
 
         Mockito.when(authorization.isInternal()).thenReturn(true);
-        Mockito.when(userService.findByTelegramId(1)).thenReturn(Optional.of(user));
+        Mockito.when(userService.findByTelegramId("1")).thenReturn(Optional.of(user));
         Mockito.when(timetableService.findUsersDutyInFuture(user, 2)).thenReturn(page);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 1)).thenReturn("2");
 
@@ -88,7 +88,7 @@ public class WhenMeHandlerTest {
         SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
         SendMessage expected =
                 SendMessage.builder()
-                        .chatId(Long.toString(user.getTelegramId()))
+                        .chatId(user.getTelegramId())
                         .text(text.toString())
                         .build();
 
@@ -102,7 +102,7 @@ public class WhenMeHandlerTest {
         Page page = new PageImpl(timetableList);
 
         Mockito.when(authorization.isInternal()).thenReturn(true);
-        Mockito.when(userService.findByTelegramId(1)).thenReturn(Optional.of(user));
+        Mockito.when(userService.findByTelegramId("1")).thenReturn(Optional.of(user));
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 1)).thenReturn("2");
         Mockito.when(timetableService.findUsersDutyInFuture(user, 2)).thenReturn(page);
 
@@ -110,7 +110,7 @@ public class WhenMeHandlerTest {
 
         SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(user.getTelegramId()))
+                .chatId(user.getTelegramId())
                 .text(text)
                 .build();
 
@@ -128,7 +128,7 @@ public class WhenMeHandlerTest {
 
         SendMessage actual = handler.operate(user.getTelegramId(), authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
-                .chatId(Long.toString(user.getTelegramId()))
+                .chatId(user.getTelegramId())
                 .text(text)
                 .build();
 

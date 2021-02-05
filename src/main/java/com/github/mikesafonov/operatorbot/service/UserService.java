@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    Optional<User> findByTelegramId(long telegramId);
+    Optional<User> findByTelegramId(String telegramId);
 
     List<User> findAll();
 
-    User addUser(long telegramId, String fullName);
+    User addUser(String telegramId, String fullName);
 
-    User addUserDuty(long telegramId, String fullName);
+    User addUserDuty(String telegramId, String fullName);
 
-    void changeUserRole(long telegramId, Role role);
+    void changeUserRole(String telegramId, Role role);
 
     void deleteUser(Integer id);
 
@@ -29,5 +29,5 @@ public interface UserService {
 
     List<User> findByRoleAndStatusOrderByFullNameAsc(Role role, Status status);
 
-    void updateUserChatStatus(long telegramId, ChatStatus chatStatus);
+    void updateUserChatStatus(String telegramId, ChatStatus chatStatus);
 }
