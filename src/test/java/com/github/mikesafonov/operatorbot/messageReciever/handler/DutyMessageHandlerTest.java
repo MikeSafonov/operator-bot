@@ -17,6 +17,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class DutyMessageHandlerTest {
     @Mock
@@ -36,7 +42,7 @@ public class DutyMessageHandlerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        dutyMessageHandler = new DutyMessageHandler(timetableService, userService);
+        dutyMessageHandler = new DutyMessageHandler(timetableService);
     }
 
     @Test
@@ -51,11 +57,24 @@ public class DutyMessageHandlerTest {
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
         Mockito.when(authorization.getUserFullName()).thenReturn(issuer.getFullName());
+        Mockito.when(userService.findByTelegramId(chatId)).thenReturn(Optional.of(issuer));
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText("Ответить");
+        button.setCallbackData(issuer.getTelegramId());
+
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+        keyboardButtonsRow.add(button);
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow);
+        inlineKeyboardMarkup.setKeyboard(rowList);
 
         SendMessage actual = dutyMessageHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
                 .chatId(dutyId)
                 .text(issuer.getFullName() + "\n" + "\n" + parsedCommand.getText())
+                .replyMarkup(inlineKeyboardMarkup)
                 .build();
         Assertions.assertEquals(expected, actual);
     }

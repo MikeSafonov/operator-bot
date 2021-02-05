@@ -12,6 +12,6 @@ public class MessageHandlerFactory {
     private final UserService userService;
 
     public MessageHandler createNewHandler() {
-        return new DutyMessageHandler(timetableService, userService);
+        return new DutyMessageHandler(timetableService);
     }
 }

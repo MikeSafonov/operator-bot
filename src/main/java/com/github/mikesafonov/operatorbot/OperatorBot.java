@@ -29,7 +29,9 @@ public class OperatorBot extends TelegramLongPollingBot {
 	@Override
 	public void onUpdateReceived(Update update) {
 		if (update.getMessage() != null && update.getMessage().hasText()) {
-			sendMessage(messageReciever.analyze(update));
+			sendMessage(messageReciever.analyzeMessage(update));
+		} else if(update.getCallbackQuery() != null && update.hasCallbackQuery()) {
+			sendMessage(messageReciever.analyzeCallback(update));
 		}
 	}
 
