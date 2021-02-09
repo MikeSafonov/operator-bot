@@ -1,6 +1,5 @@
 package com.github.mikesafonov.operatorbot.service;
 
-import com.github.mikesafonov.operatorbot.model.ChatStatus;
 import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.User;
