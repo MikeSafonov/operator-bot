@@ -1,6 +1,5 @@
 package com.github.mikesafonov.operatorbot.service.impl;
 
-import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationService;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
@@ -30,11 +29,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             if (userId.contains(telegramId)) {
                 return new AuthorizationTelegramAdmin(optionalUser.get());
             } else {
-                if (optionalUser.get().getRole().equals(Role.DUTY)) {
-                    return new AuthorizationTelegramInternal(optionalUser.get());
-                } else {
-                    return new AuthorizationTelegramExternal(optionalUser.get());
-                }
+                return new AuthorizationTelegramUser(optionalUser.get());
             }
         } else {
             return new AuthorizationTelegramUnknown();

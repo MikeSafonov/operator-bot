@@ -70,7 +70,7 @@ public class AddHandlerTest {
         Mockito.when(authorization.isAdmin()).thenReturn(true);
         Mockito.when(parser.getParamValue("/add", 0, 2)).thenReturn(null);
         Mockito.when(parser.getParamValue("/add", 1, 2)).thenReturn(null);
-        SendMessage actual = addHandler.operate(chatId, authorization, new ParsedCommand(Command.ADD_DUTY, "/add"));
+        SendMessage actual = addHandler.operate(chatId, authorization, new ParsedCommand(Command.ADD_USER, "/add"));
         SendMessage expected = SendMessage.builder()
                 .chatId(chatId)
                 .text("Команда введена неверно!")

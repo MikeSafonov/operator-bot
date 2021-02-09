@@ -10,17 +10,12 @@ public class AuthorizationTelegramAdmin implements AuthorizationTelegram {
     private final User user;
 
     @Override
-    public boolean isExternal() {
-        return false;
-    }
-
-    @Override
     public boolean isAdmin() {
         return true;
     }
 
     @Override
-    public boolean isInternal() {
+    public boolean isUser() {
         return true;
     }
 

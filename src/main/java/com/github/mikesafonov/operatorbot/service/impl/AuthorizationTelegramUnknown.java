@@ -11,12 +11,7 @@ public class AuthorizationTelegramUnknown implements AuthorizationTelegram {
     }
 
     @Override
-    public boolean isExternal() {
-        return false;
-    }
-
-    @Override
-    public boolean isInternal() {
+    public boolean isUser() {
         return false;
     }
 

@@ -6,7 +6,7 @@ import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class AuthorizationTelegramExternal implements AuthorizationTelegram {
+public class AuthorizationTelegramUser implements AuthorizationTelegram {
     private final User user;
 
     @Override
@@ -15,13 +15,8 @@ public class AuthorizationTelegramExternal implements AuthorizationTelegram {
     }
 
     @Override
-    public boolean isExternal() {
+    public boolean isUser() {
         return true;
-    }
-
-    @Override
-    public boolean isInternal() {
-        return false;
     }
 
     @Override

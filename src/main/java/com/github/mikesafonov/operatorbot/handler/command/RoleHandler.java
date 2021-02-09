@@ -17,10 +17,8 @@ public class RoleHandler implements MessageHandler {
 
         if (user.isAdmin()) {
             return builder.text("Вы администратор.").build();
-        } else if (user.isInternal()) {
+        } else if (user.isUser()) {
             return builder.text("Вы внутренний пользователь.").build();
-        } else if (user.isExternal()) {
-            return builder.text("Вы внешний пользователь.").build();
         } else {
             return builder.text("Мы вас не знаем.").build();
         }

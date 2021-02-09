@@ -32,21 +32,6 @@ public class UserServiceImpl implements UserService {
             user.setFullName(fullName);
             user.setStatus(Status.ACTIVE);
             user.setChatStatus(ChatStatus.NONE);
-            user.setRole(Role.USER);
-            return userRepository.save(user);
-        }
-    }
-
-    @Override
-    public User addUserDuty(String telegramId, String fullName) {
-        if (userRepository.findByTelegramId(telegramId).isPresent()) {
-            throw new UserAlreadyExistException("");
-        } else {
-            User user = new User();
-            user.setTelegramId(telegramId);
-            user.setFullName(fullName);
-            user.setStatus(Status.ACTIVE);
-            user.setChatStatus(ChatStatus.NONE);
             user.setRole(Role.DUTY);
             return userRepository.save(user);
         }

@@ -1,6 +1,5 @@
 package com.github.mikesafonov.operatorbot.handler.command.admin;
 
-import com.github.mikesafonov.operatorbot.command.Command;
 import com.github.mikesafonov.operatorbot.command.ParsedCommand;
 import com.github.mikesafonov.operatorbot.command.Parser;
 import com.github.mikesafonov.operatorbot.exceptions.CommandFormatException;
@@ -29,13 +28,8 @@ public class AddHandler implements MessageHandler {
 
         if (user.isAdmin()) {
             try {
-                if (parsedCommand.getCommand().equals(Command.ADD_USER)) {
-                    addUser(parsedCommand.getText());
-                    return builder.text("Пользователь успешно добавлен!").build();
-                } else if (parsedCommand.getCommand().equals(Command.ADD_DUTY)) {
-                    addDutyUser(parsedCommand.getText());
-                    return builder.text("Пользователь-дежурный успешно добавлен!").build();
-                }
+                addUser(parsedCommand.getText());
+                return builder.text("Пользователь успешно добавлен!").build();
             } catch (UserAlreadyExistException e) {
                 log.error("User with this id already exists!", e);
                 return builder.text("Пользователь с таким id уже существует!").build();
@@ -52,16 +46,6 @@ public class AddHandler implements MessageHandler {
         String fullName = getFullNameFromMessage(message);
         if (id != null && fullName != null) {
             userService.addUser(id, fullName);
-        } else {
-            throw new CommandFormatException("Incorrect command format!");
-        }
-    }
-
-    private void addDutyUser(String message) {
-        String id = getIdFromMessage(message);
-        String fullName = getFullNameFromMessage(message);
-        if (id != null && fullName != null) {
-            userService.addUserDuty(id, fullName);
         } else {
             throw new CommandFormatException("Incorrect command format!");
         }
