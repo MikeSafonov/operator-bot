@@ -38,7 +38,7 @@ public class StartHandlerTest {
 
     @Test
     public void shouldReturnStartMessageWithAdmin() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =  SendMessage.builder()
@@ -51,7 +51,7 @@ public class StartHandlerTest {
 
     @Test
     public void shouldReturnStartMessageWithUser() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser();
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =  SendMessage.builder()

@@ -36,7 +36,7 @@ public class RoleHandlerTest {
 
     @Test
     public void shouldReturnRoleMessageWithAdmin() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
@@ -48,7 +48,7 @@ public class RoleHandlerTest {
 
     @Test
     public void shouldReturnRoleMessageWithUser() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser();
 
         SendMessage actual = roleHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()

@@ -3,7 +3,6 @@ package com.github.mikesafonov.operatorbot.service.impl;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 
 public class AuthorizationTelegramUnknown implements AuthorizationTelegram {
-
     @Override
     public boolean isAdmin() {
         return false;
@@ -19,13 +18,4 @@ public class AuthorizationTelegramUnknown implements AuthorizationTelegram {
         return true;
     }
 
-    @Override
-    public String getUserFullName() {
-        return "";
-    }
-
-    @Override
-    public String getTelegramId() {
-        return "0";
-    }
 }

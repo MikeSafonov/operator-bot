@@ -37,7 +37,7 @@ class HelpHandlerTest {
 
     @Test
     void shouldReturnHelpMessageWithAdmin() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
@@ -50,7 +50,7 @@ class HelpHandlerTest {
 
     @Test
     void shouldReturnHelpMessageWithUser() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser();
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()

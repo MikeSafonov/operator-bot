@@ -4,5 +4,4 @@ import com.github.mikesafonov.operatorbot.model.ConfigTable;
 
 public interface ConfigTableService {
     ConfigTable findByConfig(String config);
-    void updateConfig(String config, String value);
 }
