@@ -36,16 +36,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserRole(String telegramId, Role role) {
-        userRepository.changeUserRole(telegramId, role);
-    }
-
-    @Override
-    public void deleteUser(Integer id) {
-
-    }
-
-    @Override
     public Optional<User> findByTelegramId(String telegramId) {
         return userRepository.findByTelegramId(telegramId);
     }
@@ -64,15 +54,5 @@ public class UserServiceImpl implements UserService {
     public User findById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User doesn't exist!"));
-    }
-
-    @Override
-    public List<User> findByRoleAndStatusOrderByFullNameAsc(Role role, Status status) {
-        return userRepository.findByRoleAndStatusOrderByFullNameAsc(role, status);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
     }
 }

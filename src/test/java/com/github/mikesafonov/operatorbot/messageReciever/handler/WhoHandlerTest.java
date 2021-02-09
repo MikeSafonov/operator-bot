@@ -46,7 +46,7 @@ public class WhoHandlerTest {
 
     @Test
     public void shouldReturnWhoMessageWithAdminWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramAdmin();
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
@@ -61,7 +61,7 @@ public class WhoHandlerTest {
 
     @Test
     public void shouldReturnWhoMessageWithAdminWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser();
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
@@ -75,7 +75,7 @@ public class WhoHandlerTest {
 
     @Test
     public void shouldReturnWhoMessageWithUserWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser();
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
@@ -90,7 +90,7 @@ public class WhoHandlerTest {
 
     @Test
     public void shouldReturnWhoMessageWithUserWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser();
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 

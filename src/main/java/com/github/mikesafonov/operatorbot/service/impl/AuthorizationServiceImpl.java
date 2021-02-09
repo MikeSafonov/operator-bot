@@ -27,9 +27,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         Optional<User> optionalUser = userService.findByTelegramId(telegramId);
         if (optionalUser.isPresent()) {
             if (userId.contains(telegramId)) {
-                return new AuthorizationTelegramAdmin(optionalUser.get());
+                return new AuthorizationTelegramAdmin();
             } else {
-                return new AuthorizationTelegramUser(optionalUser.get());
+                return new AuthorizationTelegramUser();
             }
         } else {
             return new AuthorizationTelegramUnknown();

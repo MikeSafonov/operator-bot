@@ -16,9 +16,4 @@ public class ConfigTableServiceImpl implements ConfigTableService {
     public ConfigTable findByConfig(String config) {
         return repository.findByConfig(config).orElseThrow(() -> new ConfigTableNotFoundException("Config " + config + " doesn't exists!"));
     }
-
-    @Override
-    public void updateConfig(String config, String value) {
-        repository.updateConfig(config, value);
-    }
 }

@@ -6,8 +6,4 @@ public interface AuthorizationTelegram {
 	boolean isUser();
 
 	boolean isUnknown();
-
-	String getUserFullName();
-
-	String getTelegramId();
 }
