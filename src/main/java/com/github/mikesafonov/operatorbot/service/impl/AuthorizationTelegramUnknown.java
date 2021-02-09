@@ -1,6 +1,5 @@
 package com.github.mikesafonov.operatorbot.service.impl;
 
-import com.github.mikesafonov.operatorbot.model.ChatStatus;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 
 public class AuthorizationTelegramUnknown implements AuthorizationTelegram {

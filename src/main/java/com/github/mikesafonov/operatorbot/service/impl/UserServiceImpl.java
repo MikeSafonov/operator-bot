@@ -2,7 +2,6 @@ package com.github.mikesafonov.operatorbot.service.impl;
 
 import com.github.mikesafonov.operatorbot.exceptions.UserAlreadyExistException;
 import com.github.mikesafonov.operatorbot.exceptions.UserNotFoundException;
-import com.github.mikesafonov.operatorbot.model.ChatStatus;
 import com.github.mikesafonov.operatorbot.model.Role;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.model.Status;
