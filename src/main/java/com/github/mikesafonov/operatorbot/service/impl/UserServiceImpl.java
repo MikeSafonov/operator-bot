@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
             user.setTelegramId(telegramId);
             user.setFullName(fullName);
             user.setStatus(Status.ACTIVE);
-            user.setChatStatus(ChatStatus.NONE);
             user.setRole(Role.DUTY);
             return userRepository.save(user);
         }
@@ -71,11 +70,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByRoleAndStatusOrderByFullNameAsc(Role role, Status status) {
         return userRepository.findByRoleAndStatusOrderByFullNameAsc(role, status);
-    }
-
-    @Override
-    public void updateUserChatStatus(String telegramId, ChatStatus chatStatus) {
-        userRepository.updateUserChatStatus(telegramId, chatStatus);
     }
 
     @Override

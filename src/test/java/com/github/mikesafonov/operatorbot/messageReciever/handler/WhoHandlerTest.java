@@ -42,7 +42,6 @@ public class WhoHandlerTest {
         user.setTelegramId(chatId);
         user.setStatus(Status.ACTIVE);
         user.setRole(Role.DUTY);
-        user.setChatStatus(ChatStatus.NONE);
     }
 
     @Test

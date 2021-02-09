@@ -26,6 +26,4 @@ public interface UserService {
     User findById(Integer id);
 
     List<User> findByRoleAndStatusOrderByFullNameAsc(Role role, Status status);
-
-    void updateUserChatStatus(String telegramId, ChatStatus chatStatus);
 }

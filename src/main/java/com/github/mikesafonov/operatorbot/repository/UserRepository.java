@@ -33,11 +33,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByTelegramId(String telegramId);
 
     @Modifying
-    @Query("UPDATE User u SET u.chatStatus = :chatStatus WHERE u.telegramId = :telegramId")
-    void updateUserChatStatus(
-            @Param("telegramId") String telegramId, @Param("chatStatus") ChatStatus chatStatus);
-
-    @Modifying
     @Query("UPDATE User u SET u.role = :role WHERE u.telegramId = :telegramId")
     void changeUserRole(@Param("telegramId") String telegramId, @Param("role") Role role);
 
