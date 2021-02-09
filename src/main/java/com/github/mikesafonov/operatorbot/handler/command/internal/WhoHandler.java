@@ -23,7 +23,7 @@ public class WhoHandler implements MessageHandler {
     }
 
     private SendMessage getWhoMessage(String chatId, AuthorizationTelegram user) {
-        if (user.isInternal()) {
+        if (user.isUser()) {
             return sendTodayDuty(chatId);
         } else {
             return SendMessage.builder()

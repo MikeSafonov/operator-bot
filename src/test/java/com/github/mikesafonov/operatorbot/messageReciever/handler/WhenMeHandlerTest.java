@@ -74,7 +74,7 @@ public class WhenMeHandlerTest {
         timetableList.add(fifth);
         Page page = new PageImpl(timetableList);
 
-        Mockito.when(authorization.isInternal()).thenReturn(true);
+        Mockito.when(authorization.isUser()).thenReturn(true);
         Mockito.when(userService.findByTelegramId("1")).thenReturn(Optional.of(user));
         Mockito.when(timetableService.findUsersDutyInFuture(user, 2)).thenReturn(page);
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 1)).thenReturn("2");
@@ -101,7 +101,7 @@ public class WhenMeHandlerTest {
         parsedCommand.setText(message);
         Page page = new PageImpl(timetableList);
 
-        Mockito.when(authorization.isInternal()).thenReturn(true);
+        Mockito.when(authorization.isUser()).thenReturn(true);
         Mockito.when(userService.findByTelegramId("1")).thenReturn(Optional.of(user));
         Mockito.when(parser.getParamValue(parsedCommand.getText(), 0, 1)).thenReturn("2");
         Mockito.when(timetableService.findUsersDutyInFuture(user, 2)).thenReturn(page);
@@ -118,11 +118,11 @@ public class WhenMeHandlerTest {
     }
 
     @Test
-    public void shouldReturnMessageWhenUserNotInternal() {
+    public void shouldReturnMessageWhenUserUnknown() {
         parsedCommand.setCommand(Command.WHEN_MY_DUTY);
         parsedCommand.setText(message);
 
-        Mockito.when(authorization.isInternal()).thenReturn(false);
+        Mockito.when(authorization.isUser()).thenReturn(false);
 
         String text = "Команда не доступна!";
 

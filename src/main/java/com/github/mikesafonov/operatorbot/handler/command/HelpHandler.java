@@ -23,11 +23,7 @@ public class HelpHandler implements MessageHandler {
             return builder.text(buildAdminMessage()).build();
         }
 
-        if (user.isExternal()) {
-            return builder.text(buildUserMessage()).build();
-        }
-
-        if (user.isInternal()) {
+        if (user.isUser()) {
             return builder.text(buildDutyMessage()).build();
         }
 
@@ -37,13 +33,6 @@ public class HelpHandler implements MessageHandler {
     private String buildAdminMessage() {
         return Arrays.stream(Command.values())
                 .filter(Command::isAdmin)
-                .map(Command::getDescription)
-                .collect(Collectors.joining(END_LINE));
-    }
-
-    private String buildUserMessage() {
-        return Arrays.stream(Command.values())
-                .filter(Command::isExternal)
                 .map(Command::getDescription)
                 .collect(Collectors.joining(END_LINE));
     }

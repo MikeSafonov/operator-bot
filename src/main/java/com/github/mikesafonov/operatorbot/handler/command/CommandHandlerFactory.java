@@ -31,7 +31,6 @@ public class CommandHandlerFactory {
                 return new RoleHandler();
             case WHO:
                 return new WhoHandler(timetableService);
-            case ADD_DUTY:
             case ADD_USER:
                 return new AddHandler(userService, parser);
             case REASSIGN_DUTY:

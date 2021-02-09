@@ -7,10 +7,8 @@ import com.github.mikesafonov.operatorbot.handler.command.internal.WhoHandler;
 import com.github.mikesafonov.operatorbot.model.*;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.TimetableService;
-import com.github.mikesafonov.operatorbot.service.UserService;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
-import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
-import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
+import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUser;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUnknown;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +62,7 @@ public class WhoHandlerTest {
 
     @Test
     public void shouldReturnWhoMessageWithAdminWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
@@ -77,8 +75,8 @@ public class WhoHandlerTest {
     }
 
     @Test
-    public void shouldReturnWhoMessageWithInternalUserWhenDutyExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
+    public void shouldReturnWhoMessageWithUserWhenDutyExists() throws TodayUserNotFoundException {
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
         timetable.setUserId(duty);
 
         Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
@@ -92,8 +90,8 @@ public class WhoHandlerTest {
     }
 
     @Test
-    public void shouldReturnWhoMessageWithInternalUserWhenDutyNotExists() throws TodayUserNotFoundException {
-        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
+    public void shouldReturnWhoMessageWithUserWhenDutyNotExists() throws TodayUserNotFoundException {
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
 
         Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
 
@@ -101,37 +99,6 @@ public class WhoHandlerTest {
         SendMessage expected = SendMessage.builder()
                 .chatId(chatId)
                 .text(textWhenNoDuty)
-                .build();
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldReturnWhoMessageWithExternalUserWhenDutyExists() throws TodayUserNotFoundException {
-        user.setRole(Role.USER);
-        AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
-        timetable.setUserId(duty);
-
-        Mockito.when(timetableService.findByTodayDate()).thenReturn(timetable);
-
-        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = SendMessage.builder()
-                .chatId(chatId)
-                .text(textWhenNoAccess)
-                .build();
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldReturnWhoMessageWithExternalUserWhenDutyNotExists() throws TodayUserNotFoundException {
-        user.setRole(Role.USER);
-        AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
-
-        Mockito.when(timetableService.findByTodayDate()).thenThrow(new TodayUserNotFoundException("We have no duty users today!"));
-
-        SendMessage actual = whoHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = SendMessage.builder()
-                .chatId(chatId)
-                .text(textWhenNoAccess)
                 .build();
         Assertions.assertEquals(expected, actual);
     }

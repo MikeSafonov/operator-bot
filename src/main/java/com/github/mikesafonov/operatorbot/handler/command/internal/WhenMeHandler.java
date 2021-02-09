@@ -31,17 +31,17 @@ public class WhenMeHandler implements MessageHandler {
 
     private SendMessage getMessageWhenUserOnDuty(String chatId, String message, AuthorizationTelegram user) {
         StringBuilder text = new StringBuilder();
-        if(user.isInternal()) {
-                Integer amountOfDays = getValueFromMessage(message);
-                List<Timetable> timetable = getListOfDuties(chatId, amountOfDays);
-                if(timetable.size() > 0) {
-                    text.append("Твои дежурства:").append("\n").append("\n");
-                    for(int i = 0; i < timetable.size() && i < amountOfDays; i++) {
-                        text.append(timetable.get(i).getTime().toString()).append("\n");
-                    }
-                } else {
-                    text.append("Ближайшие дежурства не назначены!");
+        if(user.isUser()) {
+            Integer amountOfDays = getValueFromMessage(message);
+            List<Timetable> timetable = getListOfDuties(chatId, amountOfDays);
+            if(timetable.size() > 0) {
+                text.append("Твои дежурства:").append("\n").append("\n");
+                for(int i = 0; i < timetable.size() && i < amountOfDays; i++) {
+                    text.append(timetable.get(i).getTime().toString()).append("\n");
                 }
+            } else {
+                text.append("Ближайшие дежурства не назначены!");
+            }
         } else {
             text.append("Команда не доступна!");
         }

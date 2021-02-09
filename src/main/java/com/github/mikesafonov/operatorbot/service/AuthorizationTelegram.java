@@ -5,9 +5,7 @@ import com.github.mikesafonov.operatorbot.model.ChatStatus;
 public interface AuthorizationTelegram {
 	boolean isAdmin();
 
-	boolean isExternal();
-
-	boolean isInternal();
+	boolean isUser();
 
 	boolean isUnknown();
 

@@ -40,14 +40,13 @@ public class AuthorizationServiceTest {
 
 		Assertions.assertNotNull(auth);
 		Assertions.assertTrue(auth.isUnknown());
-		Assertions.assertFalse(auth.isExternal());
-		Assertions.assertFalse(auth.isInternal());
+		Assertions.assertFalse(auth.isUser());
 		Assertions.assertFalse(auth.isAdmin());
 		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 	}
 
 	@Test
-	public void shouldReturnInternalAuthorization() {
+	public void shouldReturnUserAuthorization() {
 		String telegramId = "111111";
 		User user = new User();
 		user.setRole(Role.DUTY);
@@ -57,25 +56,7 @@ public class AuthorizationServiceTest {
 
 		Assertions.assertNotNull(auth);
 		Assertions.assertFalse(auth.isUnknown());
-		Assertions.assertFalse(auth.isExternal());
-		Assertions.assertTrue(auth.isInternal());
-		Assertions.assertFalse(auth.isAdmin());
-		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
-	}
-
-	@Test
-	public void shouldReturnExternalAuthorization() {
-		String telegramId = "111111";
-		User user = new User();
-		user.setRole(Role.USER);
-
-		Mockito.when(userService.findByTelegramId(telegramId)).thenReturn(Optional.of(user));
-		AuthorizationTelegram auth = service.getInfo(telegramId);
-
-		Assertions.assertNotNull(auth);
-		Assertions.assertFalse(auth.isUnknown());
-		Assertions.assertTrue(auth.isExternal());
-		Assertions.assertFalse(auth.isInternal());
+		Assertions.assertTrue(auth.isUser());
 		Assertions.assertFalse(auth.isAdmin());
 		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 	}
@@ -89,8 +70,7 @@ public class AuthorizationServiceTest {
 
 		Assertions.assertNotNull(auth);
 		Assertions.assertFalse(auth.isUnknown());
-		Assertions.assertFalse(auth.isExternal());
-		Assertions.assertTrue(auth.isInternal());
+		Assertions.assertTrue(auth.isUser());
 		Assertions.assertTrue(auth.isAdmin());
 		Mockito.verify(userService, Mockito.times(1)).findByTelegramId(telegramId);
 

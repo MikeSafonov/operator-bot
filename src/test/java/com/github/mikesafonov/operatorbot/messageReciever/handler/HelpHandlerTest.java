@@ -9,8 +9,7 @@ import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
-import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
-import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
+import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUser;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUnknown;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,27 +51,13 @@ class HelpHandlerTest {
     }
 
     @Test
-    void shouldReturnHelpMessageWithInternalUser() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
+    void shouldReturnHelpMessageWithUser() {
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
 
         SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected = SendMessage.builder()
                 .chatId(chatId)
                 .text(buildDutyMessage())
-                .parseMode(ParseMode.MARKDOWN)
-                .build();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void shouldReturnHelpMessageWithExternalUser() {
-        user.setRole(Role.USER);
-        AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
-
-        SendMessage actual = helpHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected = SendMessage.builder()
-                .chatId(chatId)
-                .text(buildUserMessage())
                 .parseMode(ParseMode.MARKDOWN)
                 .build();
         assertEquals(expected, actual);
@@ -95,13 +80,6 @@ class HelpHandlerTest {
     private String buildAdminMessage() {
         return Arrays.stream(Command.values())
                 .filter(Command::isAdmin)
-                .map(Command::getDescription)
-                .collect(Collectors.joining("\n"));
-    }
-
-    private String buildUserMessage() {
-        return Arrays.stream(Command.values())
-                .filter(Command::isExternal)
                 .map(Command::getDescription)
                 .collect(Collectors.joining("\n"));
     }

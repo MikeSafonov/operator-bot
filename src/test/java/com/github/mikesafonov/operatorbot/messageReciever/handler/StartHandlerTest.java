@@ -9,8 +9,7 @@ import com.github.mikesafonov.operatorbot.model.Status;
 import com.github.mikesafonov.operatorbot.model.User;
 import com.github.mikesafonov.operatorbot.service.AuthorizationTelegram;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramAdmin;
-import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramExternal;
-import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramInternal;
+import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUser;
 import com.github.mikesafonov.operatorbot.service.impl.AuthorizationTelegramUnknown;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,30 +52,14 @@ public class StartHandlerTest {
     }
 
     @Test
-    public void shouldReturnStartMessageWithInternalUser() {
-        AuthorizationTelegram authorization = new AuthorizationTelegramInternal(user);
+    public void shouldReturnStartMessageWithUser() {
+        AuthorizationTelegram authorization = new AuthorizationTelegramUser(user);
 
         SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
         SendMessage expected =  SendMessage.builder()
                 .chatId(chatId)
                 .text(text.toString())
                 .build();
-        expected.enableMarkdown(true);
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldReturnStartMessageWithExternalUser() {
-        user.setRole(Role.USER);
-        AuthorizationTelegram authorization = new AuthorizationTelegramExternal(user);
-
-        SendMessage actual = startHandler.operate(chatId, authorization, parsedCommand);
-        SendMessage expected =
-                SendMessage.builder()
-                        .chatId(chatId)
-                        .text(text.toString())
-                        .build();
-
         expected.enableMarkdown(true);
         Assertions.assertEquals(expected, actual);
     }

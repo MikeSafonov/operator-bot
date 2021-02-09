@@ -15,8 +15,6 @@ public interface UserService {
 
     User addUser(String telegramId, String fullName);
 
-    User addUserDuty(String telegramId, String fullName);
-
     void changeUserRole(String telegramId, Role role);
 
     void deleteUser(Integer id);
