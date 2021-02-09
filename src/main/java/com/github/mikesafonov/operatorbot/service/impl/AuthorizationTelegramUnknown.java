@@ -29,9 +29,4 @@ public class AuthorizationTelegramUnknown implements AuthorizationTelegram {
     public String getTelegramId() {
         return "0";
     }
-
-    @Override
-    public ChatStatus getChatStatus() {
-        return ChatStatus.NONE;
-    }
 }

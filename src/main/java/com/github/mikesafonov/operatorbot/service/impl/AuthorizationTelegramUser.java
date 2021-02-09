@@ -33,9 +33,4 @@ public class AuthorizationTelegramUser implements AuthorizationTelegram {
     public String getTelegramId() {
         return user.getTelegramId();
     }
-
-    @Override
-    public ChatStatus getChatStatus() {
-        return user.getChatStatus();
-    }
 }

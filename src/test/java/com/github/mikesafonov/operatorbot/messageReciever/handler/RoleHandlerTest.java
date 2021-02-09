@@ -33,7 +33,6 @@ public class RoleHandlerTest {
         user.setFullName("User");
         user.setStatus(Status.ACTIVE);
         user.setRole(Role.DUTY);
-        user.setChatStatus(ChatStatus.NONE);
     }
 
     @Test
